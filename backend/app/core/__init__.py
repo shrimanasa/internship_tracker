@@ -1,1 +1,1 @@
-# core package
+# Core module: config, security, dependencies

@@ -1,1 +1,1 @@
-# schemas package
+# Pydantic validation schemas
