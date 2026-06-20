@@ -1,1 +1,1 @@
-# db package
+# Database session and connection management
