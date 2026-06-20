@@ -6,7 +6,14 @@
 - Maintains referential integrity
 
 ## Key Design Choices
-- SERIAL vs UUID for PKs: Chose SERIAL for simplicity in college project
-- JSONB for audit logs: Flexible schema for tracking changes
-- Separate skills taxonomy: Enables reusable skill matching
-- Application status as VARCHAR: More flexible than ENUM for iteration
+- SERIAL vs UUID for PKs: Chose SERIAL for simplicity
+- JSONB for audit logs: Flexible schema for tracking
+- Separate skills taxonomy: Enables reusable matching
+- Application status as VARCHAR: More flexible than ENUM
+- Soft delete not used: CASCADE deletes for simplicity
+
+## Naming Conventions
+- Tables: plural snake_case (student_profiles)
+- PKs: table_singular_id (student_id)
+- FKs: referenced_table_singular_id
+- Timestamps: created_at, updated_at
