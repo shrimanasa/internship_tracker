@@ -4,3 +4,4 @@
 - Set up async engine with asyncpg
 - Implemented relationship mappings
 - Added cascade delete rules
+- Configured session dependency injection
