@@ -42,8 +42,9 @@ async def get_current_user(
     if user is None:
         raise credentials_exception
     
+    from sqlalchemy import text
     # Set session user id context for trigger audit logs if active connection
-    await db.execute(f"SET LOCAL app.current_user_id = '{user.user_id}';")
+    await db.execute(text(f"SET LOCAL app.current_user_id = '{user.user_id}';"))
     
     return user
 

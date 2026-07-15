@@ -134,7 +134,8 @@ async def update_official_application_status(
         raise HTTPException(status_code=404, detail="Application not found.")
 
     # Set local DB session context for history logging trigger
-    await db.execute(f"SET LOCAL app.current_user_id = '{admin.user_id}';")
+    from sqlalchemy import text
+    await db.execute(text(f"SET LOCAL app.current_user_id = '{admin.user_id}';"))
 
     app.current_status = new_status
     app.notes = f"{app.notes or ''}\n[Admin Note]: {change_note}"
