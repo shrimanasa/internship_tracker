@@ -1,4 +1,4 @@
-# 🚀 InternTrack: Smart Internship & Progress Manager
+# TrackIN: Smart Internship & Progress Manager
 
 <p align="center">
   <img src="https://img.shields.io/badge/Frontend-Next.js%2015%20%7C%20React%2019-pink?style=for-the-badge&logo=nextdotjs" alt="Next.js" />
@@ -13,7 +13,7 @@ It helps college students track their internship application pipelines, matching
 
 ---
 
-## 🎨 Design System & Aesthetics
+##  Design System & Aesthetics
 The application features a modern **Apple-inspired Glassmorphism** theme built with Tailwind CSS:
 * **Frosted White Glass Elements**: Strategic use of `backdrop-filter: blur(24px)` on cards and menus.
 * **Cutesy Pink Accents**: Curated pastel-pink highlights (`#ec4899`) and rose gradients.
@@ -21,9 +21,9 @@ The application features a modern **Apple-inspired Glassmorphism** theme built w
 
 ---
 
-## 🌟 Key Functional Portals
+##  Key Functional Portals
 
-### 🧑‍🎓 Student Portal
+###  Student Portal
 * **Dashboard Tab**: Displays circular profile completion percentage gauge, real-time KPI metrics, and upcoming deadlines.
 * **Internship Explorer**: Interactive posting browser showing eligibility scores. Matches student skill levels against posting requirements with dynamic weighting (mandatory skill check).
 * **My Tracks (Kanban Board)**: Drag-and-drop styled pipeline (Applied, Online Assessment, Interview Scheduled, Offer Received, Rejected) with customizable application sources.
@@ -31,7 +31,7 @@ The application features a modern **Apple-inspired Glassmorphism** theme built w
 * **Document Locker**: File library restricting formats (PDF/Word/Image) and file sizes (< 5MB), and displaying admin verification labels.
 * **Notification Drawer**: Active tray fetching alerts for follow-up reminders.
 
-### 👩‍💼 Admin Placement Console
+###  Admin Placement Console
 * **College Metrics**: Track placement rates, average stipend distributions, and top-performing engineering branches.
 * **Student Roster**: Directory tracking student profile completeness index and account activation controls.
 * **Company Manager**: CRUD repository for corporate partners.
@@ -40,7 +40,7 @@ The application features a modern **Apple-inspired Glassmorphism** theme built w
 
 ---
 
-## 🔄 Data Synchronization Flows
+##  Data Synchronization Flows
 
 ### 1. The Local-to-External Pipeline
 Students do not apply directly from this portal. When applying to an internship:
@@ -53,14 +53,14 @@ Students do not apply directly from this portal. When applying to an internship:
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 * **Frontend**: Next.js 15, React 19, Tailwind CSS, Lucide Icons, Recharts (D3-based charts).
 * **Backend**: FastAPI, SQLAlchemy 2.0 (Asyncpg client), Pydantic v2, Bcrypt, Pytest, Python-jose (JWT).
 * **Database**: PostgreSQL 15, PL/pgSQL procedural functions/triggers.
 
 ---
 
-## 🚀 Quick Start Guide
+##  Quick Start Guide
 
 Verify that you have **Docker** and **Docker Compose** installed on your Mac/Windows.
 
@@ -77,7 +77,7 @@ This builds the frontend/backend assets, starts PostgreSQL, and executes the dat
 
 ---
 
-## 🔑 Demo login Credentials
+##  Demo login Credentials
 
 Use these pre-seeded accounts to explore all portals:
 
@@ -88,7 +88,7 @@ Use these pre-seeded accounts to explore all portals:
 
 ---
 
-## 📝 Lab Viva Documentation Reference
+##  Lab Viva Documentation Reference
 For detailed explanations for your laboratory viva-voce exams, refer to the documents in the `docs/` folder:
 * 📊 **[ER_DIAGRAM.md](docs/ER_DIAGRAM.md)**: Conceptual relational layouts and mapping.
 * 📐 **[DATABASE_DESIGN.md](docs/DATABASE_DESIGN.md)**: Normalisation checks (3NF) and database indexes.
@@ -97,4 +97,3 @@ For detailed explanations for your laboratory viva-voce exams, refer to the docu
 
 ---
 *Developed with love for DBMS laboratory submissions.* 🦈
-
