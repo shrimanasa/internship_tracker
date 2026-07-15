@@ -18,7 +18,8 @@ router = APIRouter()
 # Helper function to trigger profile percentage update in SQL
 async def refresh_profile_completion(student_id: int, db: AsyncSession):
     # Runs the PostgreSQL stored function 'calculate_profile_completion'
-    res = await db.execute(f"SELECT calculate_profile_completion({student_id})")
+    from sqlalchemy import text
+    res = await db.execute(text(f"SELECT calculate_profile_completion({student_id})"))
     percentage = res.scalar() or 0
     
     # Update row
