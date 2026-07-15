@@ -1,7 +1,7 @@
 -- seed.sql: Seeds mock data for Indian college/student scenarios in InternTrack.
 -- All student passwords are seeded with the hash for 'Student@123'
--- Hashed password for student: $2b$12$Hk5P1RzE6CjB2YyT9vLqU.6uR6sQp9Z2n8wK7zH6dG5p5M5V5V5V5 (Student@123)
--- Hashed password for admin: $2b$12$qR1.JpXlQJqf6vjQxXzHmeK085.6bC.rB8LqZ8.45GzQ58.2QJp3e (Admin@123)
+-- Hashed password for student: $2b$12$KfW2ju20zAiWWHKDjk2N3uewyluRGplM2oJAjIqACtNKnR.6BBrHu (Student@123)
+-- Hashed password for admin: $2b$12$zIvVjYeogKhS7Mu64n8vzuA6KRFf2uAzM/IF9b/YDSm40mK.VM0s2 (Admin@123)
 
 -- 1. Departments
 INSERT INTO departments (department_name, department_code) VALUES
@@ -14,17 +14,17 @@ INSERT INTO departments (department_name, department_code) VALUES
 
 -- 2. Users (1 Admin, 10 Students)
 INSERT INTO users (full_name, email, password_hash, role, is_active) VALUES
-('System Administrator', 'admin@interntrack.com', '$2b$12$qR1.JpXlQJqf6vjQxXzHmeK085.6bC.rB8LqZ8.45GzQ58.2QJp3e', 'admin', true),
-('Aarav Patel', 'aarav.patel@student.edu', '$2b$12$Hk5P1RzE6CjB2YyT9vLqU.6uR6sQp9Z2n8wK7zH6dG5p5M5V5V5V5', 'student', true),
-('Ananya Iyer', 'ananya.iyer@student.edu', '$2b$12$Hk5P1RzE6CjB2YyT9vLqU.6uR6sQp9Z2n8wK7zH6dG5p5M5V5V5V5', 'student', true),
-('Vihaan Sharma', 'vihaan.sharma@student.edu', '$2b$12$Hk5P1RzE6CjB2YyT9vLqU.6uR6sQp9Z2n8wK7zH6dG5p5M5V5V5V5', 'student', true),
-('Diya Nair', 'diya.nair@student.edu', '$2b$12$Hk5P1RzE6CjB2YyT9vLqU.6uR6sQp9Z2n8wK7zH6dG5p5M5V5V5V5', 'student', true),
-('Aditya Verma', 'aditya.verma@student.edu', '$2b$12$Hk5P1RzE6CjB2YyT9vLqU.6uR6sQp9Z2n8wK7zH6dG5p5M5V5V5V5', 'student', true),
-('Neha Gupta', 'neha.gupta@student.edu', '$2b$12$Hk5P1RzE6CjB2YyT9vLqU.6uR6sQp9Z2n8wK7zH6dG5p5M5V5V5V5', 'student', true),
-('Rohan Mehta', 'rohan.mehta@student.edu', '$2b$12$Hk5P1RzE6CjB2YyT9vLqU.6uR6sQp9Z2n8wK7zH6dG5p5M5V5V5V5', 'student', true),
-('Shruti Joshi', 'shruti.joshi@student.edu', '$2b$12$Hk5P1RzE6CjB2YyT9vLqU.6uR6sQp9Z2n8wK7zH6dG5p5M5V5V5V5', 'student', true),
-('Vikram Rao', 'vikram.rao@student.edu', '$2b$12$Hk5P1RzE6CjB2YyT9vLqU.6uR6sQp9Z2n8wK7zH6dG5p5M5V5V5V5', 'student', true),
-('Sai Prasad', 'sai.prasad@student.edu', '$2b$12$Hk5P1RzE6CjB2YyT9vLqU.6uR6sQp9Z2n8wK7zH6dG5p5M5V5V5V5', 'student', true);
+('System Administrator', 'admin@interntrack.com', '$2b$12$zIvVjYeogKhS7Mu64n8vzuA6KRFf2uAzM/IF9b/YDSm40mK.VM0s2', 'admin', true),
+('Aarav Patel', 'aarav.patel@student.edu', '$2b$12$KfW2ju20zAiWWHKDjk2N3uewyluRGplM2oJAjIqACtNKnR.6BBrHu', 'student', true),
+('Ananya Iyer', 'ananya.iyer@student.edu', '$2b$12$KfW2ju20zAiWWHKDjk2N3uewyluRGplM2oJAjIqACtNKnR.6BBrHu', 'student', true),
+('Vihaan Sharma', 'vihaan.sharma@student.edu', '$2b$12$KfW2ju20zAiWWHKDjk2N3uewyluRGplM2oJAjIqACtNKnR.6BBrHu', 'student', true),
+('Diya Nair', 'diya.nair@student.edu', '$2b$12$KfW2ju20zAiWWHKDjk2N3uewyluRGplM2oJAjIqACtNKnR.6BBrHu', 'student', true),
+('Aditya Verma', 'aditya.verma@student.edu', '$2b$12$KfW2ju20zAiWWHKDjk2N3uewyluRGplM2oJAjIqACtNKnR.6BBrHu', 'student', true),
+('Neha Gupta', 'neha.gupta@student.edu', '$2b$12$KfW2ju20zAiWWHKDjk2N3uewyluRGplM2oJAjIqACtNKnR.6BBrHu', 'student', true),
+('Rohan Mehta', 'rohan.mehta@student.edu', '$2b$12$KfW2ju20zAiWWHKDjk2N3uewyluRGplM2oJAjIqACtNKnR.6BBrHu', 'student', true),
+('Shruti Joshi', 'shruti.joshi@student.edu', '$2b$12$KfW2ju20zAiWWHKDjk2N3uewyluRGplM2oJAjIqACtNKnR.6BBrHu', 'student', true),
+('Vikram Rao', 'vikram.rao@student.edu', '$2b$12$KfW2ju20zAiWWHKDjk2N3uewyluRGplM2oJAjIqACtNKnR.6BBrHu', 'student', true),
+('Sai Prasad', 'sai.prasad@student.edu', '$2b$12$KfW2ju20zAiWWHKDjk2N3uewyluRGplM2oJAjIqACtNKnR.6BBrHu', 'student', true);
 
 -- 3. Student Profiles
 INSERT INTO student_profiles (user_id, register_number, department_id, phone_number, graduation_year, current_semester, cgpa, location, preferred_work_mode, preferred_roles, bio, linkedin_url, github_url, portfolio_url) VALUES
