@@ -94,3 +94,7 @@ For detailed explanations for your laboratory viva-voce exams, refer to the docu
 * 📐 **[DATABASE_DESIGN.md](docs/DATABASE_DESIGN.md)**: Normalisation checks (3NF) and database indexes.
 * 💾 **[DBMS_CONCEPTS.md](docs/DBMS_CONCEPTS.md)**: ACID transactions, SQL Joins, and Triggers.
 * 🎓 **[VIVA_GUIDE.md](docs/VIVA_GUIDE.md)**: Laboratory viva questions & answer key.
+
+---
+*Developed with love for DBMS laboratory submissions.* 🦈
+
