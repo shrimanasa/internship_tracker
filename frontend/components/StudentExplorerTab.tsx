@@ -421,43 +421,63 @@ export default function StudentExplorerTab({ internships, savedIds, onRefresh }:
               <X size={20} />
             </button>
 
-            <h3 className="text-lg font-bold text-slate-800 mb-1">Apply for Internship</h3>
-            <p className="text-xs text-slate-500 mb-6">{activeInt.title} at {activeInt.company.company_name}</p>
+            <h3 className="text-lg font-bold text-rose-950 mb-1">Apply for Internship</h3>
+            <p className="text-xs text-rose-900/60 mb-5">{activeInt.title} at {activeInt.company.company_name}</p>
 
-            <form onSubmit={handleApplySubmit} className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
-                  Expected Stipend (INR / Month)
-                </label>
-                <input
-                  type="number"
-                  placeholder="e.g. 25000"
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white/50 text-sm focus:border-accent outline-none"
-                  value={expectedStipend}
-                  onChange={e => setExpectedStipend(e.target.value)}
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
-                  Cover Note / Notes
-                </label>
-                <textarea
-                  rows={3}
-                  placeholder="Write a brief cover note for your application..."
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white/50 text-sm focus:border-accent outline-none resize-none"
-                  value={applyNotes}
-                  onChange={e => setApplyNotes(e.target.value)}
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full py-3 bg-accent hover:bg-rose-600 text-white font-semibold rounded-xl text-sm shadow-md transition-all flex items-center justify-center gap-1.5"
+            <div className="mb-6 p-4 rounded-2xl bg-pink-50 border border-pink-100 space-y-3">
+              <p className="text-xs text-rose-950 font-medium">
+                To apply for this position, you must visit the company's official careers page:
+              </p>
+              <a 
+                href={activeInt.application_url || "https://careers.google.com"} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-full py-2.5 px-4 bg-accent hover:bg-pink-600 text-white font-semibold rounded-xl text-xs shadow-sm transition-all flex items-center justify-center gap-1.5"
               >
-                Submit Application
-              </button>
-            </form>
+                Go to Careers Site ↗
+              </a>
+            </div>
+
+            <div className="border-t border-pink-100 pt-4">
+              <p className="text-xs text-rose-950/80 mb-4 font-semibold">
+                After applying externally, record it below to track your progress:
+              </p>
+
+              <form onSubmit={handleApplySubmit} className="space-y-4">
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-rose-900/80 mb-1">
+                    Expected Stipend (INR / Month)
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="e.g. 25000"
+                    className="w-full px-3 py-2 rounded-xl border border-pink-200 bg-white/50 text-sm focus:border-accent outline-none"
+                    value={expectedStipend}
+                    onChange={e => setExpectedStipend(e.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-rose-900/80 mb-1">
+                    Application Tracker Notes
+                  </label>
+                  <textarea
+                    rows={3}
+                    placeholder="e.g. Applied via Google Careers. Awaiting review."
+                    className="w-full px-3 py-2 rounded-xl border border-pink-200 bg-white/50 text-sm focus:border-accent outline-none resize-none"
+                    value={applyNotes}
+                    onChange={e => setApplyNotes(e.target.value)}
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full py-3 bg-rose-950 hover:bg-rose-900 text-white font-semibold rounded-xl text-sm shadow-md transition-all flex items-center justify-center gap-1.5"
+                >
+                  Save & Track Application
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       )}

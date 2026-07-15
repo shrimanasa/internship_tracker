@@ -34,6 +34,12 @@ class Settings(BaseSettings):
     MAX_UPLOAD_SIZE: int = 5242880  # 5 MB
     ALLOWED_EXTENSIONS: str = "pdf,doc,docx,png,jpg,jpeg"
 
+    # SMTP Email Configurations
+    SMTP_HOST: str = "smtp.gmail.com"
+    SMTP_PORT: int = 587
+    SMTP_USER: str = ""
+    SMTP_PASSWORD: str = ""
+
     @property
     def allowed_extensions_list(self) -> List[str]:
         return [ext.strip().lower() for ext in self.ALLOWED_EXTENSIONS.split(",")]
