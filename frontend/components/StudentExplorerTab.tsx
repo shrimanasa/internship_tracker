@@ -80,6 +80,7 @@ export default function StudentExplorerTab({ internships, savedIds, onRefresh }:
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [expectedStipend, setExpectedStipend] = useState('');
   const [applyNotes, setApplyNotes] = useState('');
+  const [applySource, setApplySource] = useState('Company Website');
 
   const isSaved = (id: number) => savedIds.includes(id);
 
@@ -87,9 +88,9 @@ export default function StudentExplorerTab({ internships, savedIds, onRefresh }:
     e.stopPropagation();
     try {
       if (isSaved(internshipId)) {
-        await api.delete(`/internships/${internshipId}/unsave`);
+        await api.delete(`/internships/saved/${internshipId}`);
       } else {
-        await api.post(`/internships/${internshipId}/save`);
+        await api.post(`/internships/saved/${internshipId}`);
       }
       onRefresh();
     } catch (err: any) {
@@ -110,7 +111,7 @@ export default function StudentExplorerTab({ internships, savedIds, onRefresh }:
       await api.post('/applications', {
         internship_id: activeInt.internship_id,
         company_id: activeInt.company_id,
-        application_source: activeInt.source,
+        application_source: applySource,
         applied_date: new Date().toISOString().split('T')[0],
         current_status: 'Applied',
         expected_stipend: expectedStipend ? Number(expectedStipend) : 0,
@@ -444,6 +445,24 @@ export default function StudentExplorerTab({ internships, savedIds, onRefresh }:
               </p>
 
               <form onSubmit={handleApplySubmit} className="space-y-4">
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-rose-900/80 mb-1">
+                    Application Source / Platform
+                  </label>
+                  <select
+                    className="w-full px-3 py-2 rounded-xl border border-pink-200 bg-white/50 text-sm focus:border-accent outline-none"
+                    value={applySource}
+                    onChange={e => setApplySource(e.target.value)}
+                  >
+                    <option value="Company Website">Company Website</option>
+                    <option value="LinkedIn">LinkedIn</option>
+                    <option value="Indeed">Indeed</option>
+                    <option value="Internshala">Internshala</option>
+                    <option value="Referral">Referral</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
                 <div>
                   <label className="block text-[10px] font-bold uppercase tracking-wider text-rose-900/80 mb-1">
                     Expected Stipend (INR / Month)
