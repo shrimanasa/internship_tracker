@@ -1,18 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --background: #f8fafc; /* Soft slate/neutral background */
-  --foreground: #0f172a; /* Slate 900 for dark text */
-  --sidebar: #0f172a; /* Deep navy sidebar */
-  --sidebar-hover: rgba(255, 255, 255, 0.08);
-  --accent: #f43f5e; /* Soft rose/pink accent */
-  --accent-light: #fff1f2;
-  --secondary: #d8b4fe; /* Muted lavender */
-  --card-bg: rgba(255, 255, 255, 0.65); /* Frosted glass white */
-  --card-border: rgba(255, 255, 255, 0.3);
-  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
+  --background: #fff5f6; /* Soft pastel pink background */
+  --foreground: #470a1e; /* Deep berry/rose text for high-end readability */
+  --sidebar: #fdf2f8; /* Soft pink-50 sidebar */
+  --sidebar-hover: rgba(236, 72, 153, 0.08); /* Pink highlight on hover */
+  --accent: #ec4899; /* Vibrant cutesy pink */
+  --accent-light: #fff1f2; /* Sweet pink-50 */
+  --secondary: #f472b6; /* Muted cutesy rose */
+  --card-bg: rgba(255, 255, 255, 0.8); /* Highly frosted glass white */
+  --card-border: rgba(255, 255, 255, 0.6);
+  --glass-shadow: 0 8px 32px 0 rgba(236, 72, 153, 0.06); /* Pinkish glowing shadows */
 }
 
 @theme inline {
@@ -53,19 +53,19 @@ body {
 }
 
 .glass-sidebar {
-  background: rgba(15, 23, 42, 0.85); /* Deep navy with frosted glass */
-  backdrop-filter: blur(24px) saturate(140%);
-  -webkit-backdrop-filter: blur(24px) saturate(140%);
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 10px 0 32px 0 rgba(0, 0, 0, 0.05);
+  background: rgba(253, 242, 248, 0.8); /* Light pink with frosted glass */
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-right: 1px solid rgba(236, 72, 153, 0.15);
+  box-shadow: 10px 0 32px 0 rgba(236, 72, 153, 0.04);
 }
 
 .glass-nav {
-  background: rgba(248, 250, 252, 0.7); /* Soft slate matching BG */
+  background: rgba(253, 242, 248, 0.65); /* Soft pink matching BG */
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
+  border-bottom: 1px solid rgba(236, 72, 153, 0.12);
+  box-shadow: 0 4px 30px rgba(236, 72, 153, 0.02);
 }
 
 .glass-input {

@@ -145,12 +145,12 @@ export default function StudentPortal() {
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-[#f8fafc]">
       {/* Sidebar - Apple Deep Navy styling */}
-      <aside className="hidden md:flex flex-col w-64 glass-sidebar min-h-screen p-5 text-slate-300 shrink-0">
+      <aside className="hidden md:flex flex-col w-64 glass-sidebar min-h-screen p-5 text-rose-900 shrink-0">
         <div className="flex items-center gap-3 mb-8 px-2">
           <div className="w-9 h-9 rounded-xl bg-accent flex items-center justify-center text-white shadow-md">
             <Briefcase size={18} />
           </div>
-          <span className="text-lg font-bold tracking-tight text-white">InternTrack</span>
+          <span className="text-lg font-bold tracking-tight text-rose-900">InternTrack</span>
         </div>
 
         <nav className="space-y-1.5 flex-1">
@@ -163,8 +163,8 @@ export default function StudentPortal() {
                 onClick={() => setActiveTab(item.id)}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all ${
                   isActive 
-                    ? 'bg-accent text-white shadow-md shadow-rose-900/10' 
-                    : 'text-slate-400 hover:text-white hover:bg-white/5'
+                    ? 'bg-accent text-white shadow-md shadow-pink-900/10' 
+                    : 'text-rose-900/60 hover:text-rose-500 hover:bg-pink-100/40'
                 }`}
               >
                 <Icon size={18} />
@@ -174,10 +174,10 @@ export default function StudentPortal() {
           })}
         </nav>
 
-        <div className="pt-5 border-t border-slate-800">
+        <div className="pt-5 border-t border-pink-100">
           <button 
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:text-rose-400 hover:bg-rose-500/5 transition-all"
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-rose-900/60 hover:text-rose-500 hover:bg-rose-50 transition-all"
           >
             <LogOut size={18} />
             Logout
