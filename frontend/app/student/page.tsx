@@ -1,0 +1,345 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { 
+  Home, User, Briefcase, Layers, Calendar, 
+  FileText, Bell, BarChart2, LogOut, Sparkles, 
+  Menu, X, BellOff, Check 
+} from 'lucide-react';
+
+import { api, getAuthToken, clearAuthSession, getUserName } from '../../lib/api';
+import StudentDashboardTab from '../../components/StudentDashboardTab';
+import StudentProfileTab from '../../components/StudentProfileTab';
+import StudentExplorerTab from '../../components/StudentExplorerTab';
+import StudentApplicationsTab from '../../components/StudentApplicationsTab';
+import StudentInterviewsTab from '../../components/StudentInterviewsTab';
+import StudentDocumentsTab from '../../components/StudentDocumentsTab';
+import StudentRemindersTab from '../../components/StudentRemindersTab';
+import StudentAnalyticsTab from '../../components/StudentAnalyticsTab';
+
+export default function StudentPortal() {
+  const router = useRouter();
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const [userName, setUserName] = useState('Student');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Notifications state
+  const [notifications, setNotifications] = useState<any[]>([]);
+  const [showNotifications, setShowNotifications] = useState(false);
+
+  // Master lists
+  const [masterSkills, setMasterSkills] = useState<any[]>([]);
+  const [companies, setCompanies] = useState<any[]>([]);
+
+  // Student specific data
+  const [profile, setProfile] = useState<any>(null);
+  const [dashboardData, setDashboardData] = useState<any>(null);
+  const [reminders, setReminders] = useState<any[]>([]);
+  const [interviews, setInterviews] = useState<any[]>([]);
+  const [applications, setApplications] = useState<any[]>([]);
+  const [documents, setDocuments] = useState<any[]>([]);
+
+  // Authentication check
+  useEffect(() => {
+    const token = getAuthToken();
+    if (!token) {
+      router.push('/login');
+      return;
+    }
+    setUserName(getUserName() || 'Student');
+    loadCommonData();
+  }, [router]);
+
+  // Load common master datasets once
+  const loadCommonData = async () => {
+    try {
+      const skills = await api.get<any[]>('/students/skills/master');
+      setMasterSkills(skills);
+      const comps = await api.get<any[]>('/companies');
+      setCompanies(comps);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // Reload data whenever active tab changes to keep database views synced
+  useEffect(() => {
+    if (!getAuthToken()) return;
+    refreshData();
+  }, [activeTab]);
+
+  const refreshData = async () => {
+    try {
+      // Reload notifications
+      const notifs = await api.get<any[]>('/notifications?unread_only=true');
+      setNotifications(notifs);
+
+      if (activeTab === 'dashboard') {
+        const dData = await api.get<any>('/analytics/student/dashboard');
+        setDashboardData(dData);
+      } else if (activeTab === 'profile') {
+        const pData = await api.get<any>('/students/profile');
+        setProfile(pData);
+      } else if (activeTab === 'explorer') {
+        const ints = await api.get<any[]>('/internships');
+        setDashboardData({ ...dashboardData, internships: ints });
+        // Retrieve saved list
+        const saved = await api.get<any[]>('/internships/saved');
+        setReminders(saved); // temporarily cache saved items in reminders state block
+      } else if (activeTab === 'applications') {
+        const apps = await api.get<any[]>('/applications');
+        setApplications(apps);
+      } else if (activeTab === 'interviews') {
+        const intvs = await api.get<any[]>('/interviews');
+        setInterviews(intvs);
+        const apps = await api.get<any[]>('/applications');
+        setApplications(apps);
+      } else if (activeTab === 'documents') {
+        const docs = await api.get<any[]>('/documents');
+        setDocuments(docs);
+        const apps = await api.get<any[]>('/applications');
+        setApplications(apps);
+      } else if (activeTab === 'reminders') {
+        const rems = await api.get<any[]>('/reminders');
+        setReminders(rems);
+        const apps = await api.get<any[]>('/applications');
+        setApplications(apps);
+      } else if (activeTab === 'analytics') {
+        const dData = await api.get<any>('/analytics/student/dashboard');
+        setDashboardData(dData);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleLogout = () => {
+    clearAuthSession();
+    router.push('/login');
+  };
+
+  const handleMarkAllNotificationsRead = async () => {
+    try {
+      await api.post('/notifications/read');
+      setNotifications([]);
+      setShowNotifications(false);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const menuItems = [
+    { id: 'dashboard', label: 'Dashboard', icon: Home },
+    { id: 'explorer', label: 'Explore Postings', icon: Briefcase },
+    { id: 'applications', label: 'My Tracks', icon: Layers },
+    { id: 'interviews', label: 'Interviews', icon: Calendar },
+    { id: 'documents', label: 'Resumes & Docs', icon: FileText },
+    { id: 'reminders', label: 'Reminders', icon: Bell },
+    { id: 'profile', label: 'My Profile', icon: User },
+    { id: 'analytics', label: 'Analytics', icon: BarChart2 }
+  ];
+
+  const unreadNotifsCount = notifications.length;
+
+  return (
+    <div className="min-h-screen flex flex-col md:flex-row bg-[#f8fafc]">
+      {/* Sidebar - Apple Deep Navy styling */}
+      <aside className="hidden md:flex flex-col w-64 glass-sidebar min-h-screen p-5 text-slate-300 shrink-0">
+        <div className="flex items-center gap-3 mb-8 px-2">
+          <div className="w-9 h-9 rounded-xl bg-accent flex items-center justify-center text-white shadow-md">
+            <Briefcase size={18} />
+          </div>
+          <span className="text-lg font-bold tracking-tight text-white">InternTrack</span>
+        </div>
+
+        <nav className="space-y-1.5 flex-1">
+          {menuItems.map(item => {
+            const Icon = item.icon;
+            const isActive = activeTab === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => setActiveTab(item.id)}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+                  isActive 
+                    ? 'bg-accent text-white shadow-md shadow-rose-900/10' 
+                    : 'text-slate-400 hover:text-white hover:bg-white/5'
+                }`}
+              >
+                <Icon size={18} />
+                {item.label}
+              </button>
+            );
+          })}
+        </nav>
+
+        <div className="pt-5 border-t border-slate-800">
+          <button 
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:text-rose-400 hover:bg-rose-500/5 transition-all"
+          >
+            <LogOut size={18} />
+            Logout
+          </button>
+        </div>
+      </aside>
+
+      {/* Mobile Top Navigation */}
+      <header className="md:hidden sticky top-0 z-50 bg-[#0f172a] text-white px-5 py-4 flex items-center justify-between shadow-md">
+        <div className="flex items-center gap-2">
+          <Menu size={22} className="cursor-pointer" onClick={() => setMobileMenuOpen(true)} />
+          <span className="text-base font-bold">InternTrack</span>
+        </div>
+        <div className="relative">
+          <button onClick={() => setShowNotifications(!showNotifications)} className="relative p-1">
+            <Bell size={20} />
+            {unreadNotifsCount > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-accent rounded-full text-[9px] font-bold flex items-center justify-center text-white">
+                {unreadNotifsCount}
+              </span>
+            )}
+          </button>
+        </div>
+      </header>
+
+      {/* Mobile Drawer Menu */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex md:hidden">
+          <div className="w-64 bg-[#0f172a] p-5 flex flex-col justify-between">
+            <div>
+              <div className="flex justify-between items-center mb-8">
+                <span className="text-lg font-bold text-white">Menu</span>
+                <X size={22} className="text-slate-400 cursor-pointer" onClick={() => setMobileMenuOpen(false)} />
+              </div>
+              <nav className="space-y-1">
+                {menuItems.map(item => {
+                  const Icon = item.icon;
+                  const isActive = activeTab === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => { setActiveTab(item.id); setMobileMenuOpen(false); }}
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold ${
+                        isActive ? 'bg-accent text-white' : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      <Icon size={18} />
+                      {item.label}
+                    </button>
+                  );
+                })}
+              </nav>
+            </div>
+            <button 
+              onClick={handleLogout}
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:text-rose-400"
+            >
+              <LogOut size={18} />
+              Logout
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Main Panel */}
+      <div className="flex-1 flex flex-col min-w-0 min-h-screen">
+        {/* Top Navbar */}
+        <header className="hidden md:flex sticky top-0 z-40 glass-nav px-8 py-4 items-center justify-between shrink-0">
+          <div className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider">
+            <span>Student Dashboard</span>
+            <span>/</span>
+            <span className="text-slate-800">{activeTab}</span>
+          </div>
+
+          <div className="flex items-center gap-6">
+            <span className="text-xs font-semibold text-slate-600 bg-white/50 border border-slate-200/40 px-3 py-1.5 rounded-xl">
+              Hello, <strong className="font-bold text-slate-800">{userName}</strong>
+            </span>
+
+            {/* Notification drop */}
+            <div className="relative">
+              <button 
+                onClick={() => setShowNotifications(!showNotifications)}
+                className="relative p-2 rounded-xl bg-white/50 border border-slate-200/40 hover:bg-white text-slate-600 transition-all hover:shadow-xs"
+              >
+                <Bell size={18} />
+                {unreadNotifsCount > 0 && (
+                  <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-accent rounded-full border-2 border-[#f8fafc]"></span>
+                )}
+              </button>
+
+              {showNotifications && (
+                <div className="absolute right-0 mt-3 w-80 bg-white border border-slate-200 rounded-2xl shadow-xl z-50 p-4 space-y-3">
+                  <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+                    <span className="text-xs font-bold text-slate-800 uppercase tracking-wide">Notifications</span>
+                    {unreadNotifsCount > 0 && (
+                      <button 
+                        onClick={handleMarkAllNotificationsRead}
+                        className="text-[10px] font-bold text-accent hover:underline flex items-center gap-0.5"
+                      >
+                        <Check size={12} />
+                        Mark read
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="max-h-60 overflow-y-auto space-y-2 pr-1">
+                    {notifications.length === 0 ? (
+                      <div className="text-center py-6 text-slate-400 text-xs flex flex-col gap-1 items-center">
+                        <BellOff size={20} className="text-slate-300" />
+                        <span>No new notifications</span>
+                      </div>
+                    ) : (
+                      notifications.map((notif, idx) => (
+                        <div key={idx} className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+                          <span className="font-bold text-slate-800 text-[11px] block">{notif.title}</span>
+                          <span className="text-[10px] text-slate-500 leading-normal block">{notif.message}</span>
+                          <span className="text-[8px] text-slate-400 block">
+                            {new Date(notif.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </header>
+
+        {/* Content Container */}
+        <main className="flex-1 p-6 md:p-8 overflow-y-auto z-10 max-w-6xl w-full mx-auto">
+          {activeTab === 'dashboard' && (
+            <StudentDashboardTab data={dashboardData} onNavigate={setActiveTab} />
+          )}
+          {activeTab === 'profile' && (
+            <StudentProfileTab profile={profile} masterSkills={masterSkills} onRefresh={refreshData} />
+          )}
+          {activeTab === 'explorer' && (
+            <StudentExplorerTab 
+              internships={dashboardData?.internships || []} 
+              savedIds={reminders?.map(s => s.internship_id) || []} // saved items cached in reminders temporarily
+              onRefresh={refreshData} 
+            />
+          )}
+          {activeTab === 'applications' && (
+            <StudentApplicationsTab applications={applications} companies={companies} onRefresh={refreshData} />
+          )}
+          {activeTab === 'interviews' && (
+            <StudentInterviewsTab interviews={interviews} applications={applications} onRefresh={refreshData} />
+          )}
+          {activeTab === 'documents' && (
+            <StudentDocumentsTab documents={documents} applications={applications} onRefresh={refreshData} />
+          )}
+          {activeTab === 'reminders' && (
+            <StudentRemindersTab reminders={reminders} applications={applications} onRefresh={refreshData} />
+          )}
+          {activeTab === 'analytics' && (
+            <StudentAnalyticsTab analytics={dashboardData} />
+          )}
+        </main>
+      </div>
+    </div>
+  );
+}
