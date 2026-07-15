@@ -259,9 +259,11 @@ INSERT INTO saved_internships (student_id, internship_id) VALUES
 -- 11. Applications (40 entries in different statuses)
 INSERT INTO applications (student_id, internship_id, company_id, external_company_name, external_role_title, application_source, applied_date, current_status, priority, expected_stipend, notes, next_action, next_action_date) VALUES
 -- Student 1 (Aarav): Applied to Google (Offer Accepted), Zoho (Withdrawn), Razorpay (Under Review)
-(1, 1, 1, NULL, NULL, 'Internal', '2026-07-01', 'Offer Accepted', 'High', 90000.00, 'Top choice. Interviewed in early July.', 'Enjoy internship!', '2026-08-01'),
+(1, 1, 1, NULL, NULL, 'Google Careers', '2026-07-01', 'Offer Accepted', 'High', 90000.00, 'Top choice. Interviewed in early July.', 'Enjoy internship!', '2026-08-01'),
 (1, 2, 2, NULL, NULL, 'Internal', '2026-07-02', 'Withdrawn', 'Medium', 30000.00, 'Withdrew since Google offer was accepted.', 'None', NULL),
-(1, 3, 3, NULL, NULL, 'Internal', '2026-07-03', 'Under Review', 'High', 45000.00, 'Backend rounds went well.', 'Await review feedback', '2026-07-25'),
+(1, 3, 3, NULL, NULL, 'LinkedIn', '2026-07-03', 'Under Review', 'High', 45000.00, 'Backend rounds went well.', 'Await review feedback', '2026-07-25'),
+(1, 7, 5, NULL, NULL, 'Internshala', '2026-07-10', 'Interview Scheduled', 'High', 35000.00, 'Applied via Internshala. Coding round cleared, technical interview scheduled.', 'Revise networks and OS security', '2026-07-22'),
+(1, 15, 11, NULL, NULL, 'Referral', '2026-07-12', 'Under Review', 'Medium', 50000.00, 'Applied via employee referral. Resume successfully passed initial screening.', 'Follow up with referrer', '2026-07-26'),
 (1, NULL, 3, 'Razorpay (External)', 'UI Engineer', 'Indeed', '2026-06-15', 'Rejected', 'Low', 25000.00, 'Applied via Indeed. Got rejection email.', 'None', NULL),
 -- Student 2 (Ananya): Applied to Zoho (Offer Accepted), Freshworks (Offer Declined), Infosys (Interview Scheduled)
 (2, 2, 2, NULL, NULL, 'Internal', '2026-07-01', 'Offer Accepted', 'High', 30000.00, 'Accepted offer, starting next month.', 'Prepare onboarding docs', '2026-07-28'),
