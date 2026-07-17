@@ -15,7 +15,7 @@ INSERT INTO departments (department_name, department_code) VALUES
 -- 2. Users (1 Admin, 10 Students)
 INSERT INTO users (full_name, email, password_hash, role, is_active) VALUES
 ('System Administrator', 'admin@interntrack.com', '$2b$12$zIvVjYeogKhS7Mu64n8vzuA6KRFf2uAzM/IF9b/YDSm40mK.VM0s2', 'admin', true),
-('Aarav Patel', 'aarav.patel@student.edu', '$2b$12$KfW2ju20zAiWWHKDjk2N3uewyluRGplM2oJAjIqACtNKnR.6BBrHu', 'student', true),
+('shri manasa', 'shrimanasa151106@gmail.com', '$2b$12$KfW2ju20zAiWWHKDjk2N3uewyluRGplM2oJAjIqACtNKnR.6BBrHu', 'student', true),
 ('Ananya Iyer', 'ananya.iyer@student.edu', '$2b$12$KfW2ju20zAiWWHKDjk2N3uewyluRGplM2oJAjIqACtNKnR.6BBrHu', 'student', true),
 ('Vihaan Sharma', 'vihaan.sharma@student.edu', '$2b$12$KfW2ju20zAiWWHKDjk2N3uewyluRGplM2oJAjIqACtNKnR.6BBrHu', 'student', true),
 ('Diya Nair', 'diya.nair@student.edu', '$2b$12$KfW2ju20zAiWWHKDjk2N3uewyluRGplM2oJAjIqACtNKnR.6BBrHu', 'student', true),
@@ -28,7 +28,7 @@ INSERT INTO users (full_name, email, password_hash, role, is_active) VALUES
 
 -- 3. Student Profiles
 INSERT INTO student_profiles (user_id, register_number, department_id, phone_number, graduation_year, current_semester, cgpa, location, preferred_work_mode, preferred_roles, bio, linkedin_url, github_url, portfolio_url) VALUES
-(2, 'SRN2023CSE01', 1, '9876543210', 2027, 6, 8.75, 'Bengaluru', 'Hybrid', 'Full Stack Developer, Backend Developer', 'Passionate about React, Node.js, and DB systems.', 'https://linkedin.com/in/aarav-patel', 'https://github.com/aaravpatel', 'https://aarav.dev'),
+(2, 'SRN2023CSE01', 1, '9876543210', 2027, 6, 9.80, 'Bengaluru', 'Hybrid', 'Full Stack Developer, Software Engineer', 'Aspiring software engineer and database architect. Love building premium, glassmorphism interfaces and solid database systems.', 'https://linkedin.com/in/shri-manasa-s-25739a362', 'https://github.com/shrimanasa', 'https://shrimanasa.dev'),
 (3, 'SRN2023CSE02', 1, '9876543211', 2027, 6, 9.20, 'Chennai', 'Remote', 'Frontend Developer, UI Engineer', 'UI/UX enthusiast. Love coding in Next.js and Tailwind.', 'https://linkedin.com/in/ananya-iyer', 'https://github.com/ananyaiyer', 'https://ananya.design'),
 (4, 'SRN2023AI01', 2, '9876543212', 2027, 6, 7.80, 'Hyderabad', 'On-site', 'AI/ML Engineer, Data Analyst', 'Building NLP agents and computer vision pipelines.', 'https://linkedin.com/in/vihaan-sharma', 'https://github.com/vihaansharma', ''),
 (5, 'SRN2023AI02', 2, '9876543213', 2027, 6, 9.50, 'Bengaluru', 'Remote', 'Data Scientist, Research Assistant', 'Interested in Generative AI and deep reinforcement learning.', 'https://linkedin.com/in/diya-nair', 'https://github.com/diyanair', 'https://diya.ai'),
@@ -87,7 +87,7 @@ INSERT INTO skills (skill_name, category, description) VALUES
 
 -- 6. Student Skills
 INSERT INTO student_skills (student_id, skill_id, proficiency_level, years_of_experience, verified) VALUES
--- Student 1 (Aarav): React, Next, SQL, Postgre, Git, Communication, Problem Solving
+-- Student 1 (shri manasa): React, Next, SQL, Postgre, Git, Communication, Problem Solving
 (1, 2, 'Advanced', 2.0, true),
 (1, 3, 'Intermediate', 1.5, true),
 (1, 8, 'Advanced', 2.0, true),
@@ -258,7 +258,7 @@ INSERT INTO saved_internships (student_id, internship_id) VALUES
 
 -- 11. Applications (40 entries in different statuses)
 INSERT INTO applications (student_id, internship_id, company_id, external_company_name, external_role_title, application_source, applied_date, current_status, priority, expected_stipend, notes, next_action, next_action_date) VALUES
--- Student 1 (Aarav): Applied to Google (Offer Accepted), Zoho (Withdrawn), Razorpay (Under Review)
+-- Student 1 (shri manasa): Applied to Google (Offer Accepted), Zoho (Withdrawn), Razorpay (Under Review)
 (1, 1, 1, NULL, NULL, 'Google Careers', '2026-07-01', 'Offer Accepted', 'High', 90000.00, 'Top choice. Interviewed in early July.', 'Enjoy internship!', '2026-08-01'),
 (1, 2, 2, NULL, NULL, 'Internal', '2026-07-02', 'Withdrawn', 'Medium', 30000.00, 'Withdrew since Google offer was accepted.', 'None', NULL),
 (1, 3, 3, NULL, NULL, 'LinkedIn', '2026-07-03', 'Under Review', 'High', 45000.00, 'Backend rounds went well.', 'Await review feedback', '2026-07-25'),
@@ -349,7 +349,7 @@ INSERT INTO offers (application_id, offered_role, stipend_amount, currency, star
 
 -- 15. Documents (Resume files for student profile completion)
 INSERT INTO documents (student_id, application_id, document_type, original_filename, stored_filename, file_path, mime_type, file_size, verification_status) VALUES
-(1, NULL, 'Resume', 'Aarav_Patel_CV.pdf', 'aarav_cv_129381.pdf', 'uploads/documents/aarav_cv_129381.pdf', 'application/pdf', 1024500, 'Verified'),
+(1, NULL, 'Resume', 'shri_manasa_CV.pdf', 'shri_manasa_cv_129381.pdf', 'uploads/documents/shri_manasa_cv_129381.pdf', 'application/pdf', 1024500, 'Verified'),
 (2, NULL, 'Resume', 'Ananya_Iyer_Resume.pdf', 'ananya_cv_281938.pdf', 'uploads/documents/ananya_cv_281938.pdf', 'application/pdf', 980400, 'Verified'),
 (3, NULL, 'Resume', 'Vihaan_Sharma_Profile.pdf', 'vihaan_cv_481932.pdf', 'uploads/documents/vihaan_cv_481932.pdf', 'application/pdf', 1100500, 'Verified'),
 (4, NULL, 'Resume', 'Diya_Nair_CV_2026.pdf', 'diya_cv_982938.pdf', 'uploads/documents/diya_cv_982938.pdf', 'application/pdf', 1234900, 'Verified'),
@@ -373,7 +373,7 @@ INSERT INTO reminders (student_id, application_id, title, description, reminder_
 
 -- 17. Notifications
 INSERT INTO notifications (user_id, title, message, notification_type, is_read) VALUES
-(2, 'Welcome to InternTrack!', 'Hi Aarav, complete your profile to unlock custom skill-matching analytics.', 'System', true),
+(2, 'Welcome to InternTrack!', 'Hi shri manasa, complete your profile to unlock custom skill-matching analytics.', 'System', true),
 (2, 'Google Application Accepted', 'Congratulations! Your application status has been marked as Offer Accepted.', 'Application', false),
 (3, 'Interview Scheduled', 'Your interview for Next.js specialist has been scheduled for 20th July.', 'Interview', false);
 
