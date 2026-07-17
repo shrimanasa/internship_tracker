@@ -1,4 +1,6 @@
 from datetime import datetime, timedelta
+import time
+from collections import defaultdict
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -13,6 +15,18 @@ from app.schemas.schemas import UserCreate, Token, UserResponse, UserLogin
 from app.api.deps import get_current_user
 
 router = APIRouter()
+
+# In-memory rate limiting for login attempts
+login_attempts = defaultdict(list)
+
+def check_rate_limit(username: str, limit: int = 5, period: int = 60) -> bool:
+    now = time.time()
+    # Filter out attempts older than the window
+    login_attempts[username] = [t for t in login_attempts[username] if now - t < period]
+    if len(login_attempts[username]) >= limit:
+        return False
+    login_attempts[username].append(now)
+    return True
 
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 async def register_student(user_in: UserCreate, db: AsyncSession = Depends(get_db)):
@@ -86,6 +100,14 @@ async def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: AsyncSession = Depends(get_db)
 ):
+    # Check rate limiting
+    username_key = form_data.username.strip().lower()
+    if not check_rate_limit(username_key, limit=5, period=60):
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Too many login attempts. Please try again after 60 seconds."
+        )
+
     # Retrieve user by email
     result = await db.execute(select(User).where(User.email == form_data.username))
     user = result.scalars().first()
