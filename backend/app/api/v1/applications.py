@@ -1,5 +1,5 @@
 from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
@@ -9,6 +9,7 @@ from app.db.session import get_db
 from app.models.models import Application, ApplicationStatusHistory, StudentProfile, Company, Internship, User
 from app.schemas.schemas import ApplicationCreate, ApplicationUpdate, ApplicationResponse, ApplicationDetailsResponse
 from app.api.deps import get_current_student, get_current_active_user
+from app.services.email import send_email_notification
 
 router = APIRouter()
 
@@ -71,6 +72,7 @@ async def get_application_details(
 @router.post("", response_model=ApplicationResponse, status_code=status.HTTP_201_CREATED)
 async def create_application(
     app_in: ApplicationCreate,
+    background_tasks: BackgroundTasks,
     student: StudentProfile = Depends(get_current_student),
     db: AsyncSession = Depends(get_db)
 ):
@@ -127,7 +129,26 @@ async def create_application(
         )
         .where(Application.application_id == new_app.application_id)
     )
-    return res.scalars().first()
+    application = res.scalars().first()
+
+    # Load student user to get their email address
+    res_u = await db.execute(select(User).where(User.user_id == student.user_id))
+    user = res_u.scalars().first()
+    if user and user.email:
+        company_name = application.company.company_name if application.company else (application.internship.company.company_name if application.internship and application.internship.company else "External Company")
+        role_title = application.internship.title if application.internship else (application.external_role_title or "Internship Role")
+        
+        subject = f"Application Logged: {role_title} at {company_name}"
+        body = f"""
+        <p>Hi {user.full_name},</p>
+        <p>Your application for <strong>{role_title}</strong> at <strong>{company_name}</strong> has been successfully registered in InternTrack!</p>
+        <p><strong>Status:</strong> {application.current_status}</p>
+        <p><strong>Date Applied:</strong> {application.applied_date}</p>
+        <p>We'll notify you of updates or upcoming interviews.</p>
+        """
+        background_tasks.add_task(send_email_notification, user.email, subject, body)
+
+    return application
 
 @router.put("/{application_id}", response_model=ApplicationResponse)
 async def update_application(
