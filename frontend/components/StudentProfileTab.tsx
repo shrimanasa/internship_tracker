@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { 
   User, BookOpen, Layers, Plus, Trash2, 
-  Globe, Check, AlertCircle, Save 
+  Globe, Check, AlertCircle, Save, Award,
+  Sparkles, RefreshCw, ExternalLink
 } from 'lucide-react';
 import { api } from '../lib/api';
 
@@ -89,6 +90,115 @@ export default function StudentProfileTab({ profile, masterSkills, onRefresh }: 
   const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  // GitHub integration state
+  const [githubProfile, setGithubProfile] = useState<any>(null);
+  const [syncing, setSyncing] = useState(false);
+
+  // Initialize and load saved GitHub profile details
+  useEffect(() => {
+    if (profile && typeof window !== 'undefined') {
+      const saved = localStorage.getItem(`github_${profile.student_id}`);
+      if (saved) {
+        setGithubProfile(JSON.parse(saved));
+      } else if (profile.github_url) {
+        // Auto sync if github URL exists but no cache
+        syncGithub(profile.github_url);
+      }
+    }
+  }, [profile?.student_id, profile?.github_url]);
+
+  const syncGithub = async (githubUrl: string) => {
+    if (!githubUrl) return;
+    setSyncing(true);
+    try {
+      const cleanUrl = githubUrl.trim();
+      const urlParts = cleanUrl.split('/');
+      const username = urlParts[urlParts.length - 1] || urlParts[urlParts.length - 2];
+      if (!username) throw new Error('Could not parse GitHub username.');
+
+      const res = await fetch(`https://api.github.com/users/${username}`);
+      if (!res.ok) throw new Error('GitHub user profile not found.');
+      const data = await res.json();
+
+      const profileInfo = {
+        avatar_url: data.avatar_url,
+        name: data.name || username,
+        bio: data.bio || '',
+        followers: data.followers,
+        following: data.following,
+        public_repos: data.public_repos,
+        username: username
+      };
+      setGithubProfile(profileInfo);
+      localStorage.setItem(`github_${profile.student_id}`, JSON.stringify(profileInfo));
+      localStorage.setItem(`github_active_profile`, JSON.stringify(profileInfo));
+    } catch (err: any) {
+      console.error(err);
+    } finally {
+      setSyncing(false);
+    }
+  };
+
+  const getAchievements = () => {
+    const achievementsList = [];
+    
+    // 1. DBMS Prodigy - 100% completion
+    const isDbmsProdigy = profile.profile_completion_percentage === 100;
+    achievementsList.push({
+      id: 'dbms_prodigy',
+      title: 'DBMS Prodigy',
+      emoji: '💾',
+      description: 'Achieve 100% profile completeness score in InternTrack.',
+      unlocked: isDbmsProdigy,
+      category: 'Application'
+    });
+    
+    // 2. Skill Builder - 5+ skills
+    achievementsList.push({
+      id: 'skill_builder',
+      title: 'Skill Builder',
+      emoji: '🏆',
+      description: 'Build a comprehensive skill taxonomy with 5+ technical skills.',
+      unlocked: profile.skills.length >= 5,
+      category: 'Application'
+    });
+
+    const isGithubLinked = !!githubProfile;
+    const isShrimanasa = githubProfile?.username?.toLowerCase() === 'shrimanasa';
+
+    // 3. Quickdraw Badge
+    achievementsList.push({
+      id: 'quickdraw',
+      title: 'Quickdraw',
+      emoji: '🤠',
+      description: 'Close an issue or merge a pull request within 5 minutes of opening.',
+      unlocked: isGithubLinked && isShrimanasa,
+      category: 'GitHub'
+    });
+
+    // 4. YOLO Badge
+    achievementsList.push({
+      id: 'yolo',
+      title: 'YOLO',
+      emoji: '🌈',
+      description: 'Create and merge a pull request without anyone reviewing it.',
+      unlocked: isGithubLinked && isShrimanasa,
+      category: 'GitHub'
+    });
+
+    // 5. Pull Shark Badge
+    achievementsList.push({
+      id: 'pull_shark',
+      title: 'Pull Shark',
+      emoji: '🦈',
+      description: 'Merge pull requests and contribute to codebase branches.',
+      unlocked: isGithubLinked,
+      category: 'GitHub'
+    });
+
+    return achievementsList;
+  };
   
   // Skill form state
   const [selectedSkillId, setSelectedSkillId] = useState('');
@@ -627,6 +737,135 @@ export default function StudentProfileTab({ profile, masterSkills, onRefresh }: 
                   ))}
                 </div>
               )}
+            </div>
+          </div>
+
+          {/* GitHub Sync panel */}
+          {profile.github_url && (
+            <div className="glass-panel p-6 rounded-3xl space-y-4 bg-gradient-to-br from-white/80 via-white/50 to-slate-50/30">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400 flex items-center justify-between">
+                <span className="flex items-center gap-2">
+                  <GithubIcon size={16} />
+                  <span>GitHub Integration</span>
+                </span>
+                {githubProfile && (
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                )}
+              </h3>
+
+              {githubProfile ? (
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    <img 
+                      src={githubProfile.avatar_url} 
+                      alt={githubProfile.name}
+                      className="w-12 h-12 rounded-2xl border-2 border-pink-100 shadow-sm"
+                    />
+                    <div className="min-w-0">
+                      <h4 className="font-bold text-slate-800 text-sm truncate flex items-center gap-1.5">
+                        {githubProfile.name}
+                        <a 
+                          href={`https://github.com/${githubProfile.username}`}
+                          target="_blank" 
+                          rel="noreferrer"
+                          className="text-slate-400 hover:text-accent transition-colors"
+                        >
+                          <ExternalLink size={12} />
+                        </a>
+                      </h4>
+                      <p className="text-[10px] text-slate-400 truncate">@{githubProfile.username}</p>
+                    </div>
+                  </div>
+
+                  {githubProfile.bio && (
+                    <p className="text-[11px] text-slate-500 italic bg-white/40 p-2 rounded-xl border border-slate-100/50 leading-relaxed">
+                      &quot;{githubProfile.bio}&quot;
+                    </p>
+                  )}
+
+                  <div className="grid grid-cols-3 gap-2 text-center bg-slate-50/60 p-2.5 rounded-2xl border border-slate-100/50">
+                    <div>
+                      <span className="text-[10px] text-slate-400 block">Repos</span>
+                      <span className="text-xs font-bold text-slate-800">{githubProfile.public_repos}</span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-slate-400 block">Followers</span>
+                      <span className="text-xs font-bold text-slate-800">{githubProfile.followers}</span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-slate-400 block">Following</span>
+                      <span className="text-xs font-bold text-slate-800">{githubProfile.following}</span>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => syncGithub(profile.github_url!)}
+                    disabled={syncing}
+                    className="w-full py-2 bg-slate-100 hover:bg-slate-200 disabled:bg-slate-50 text-slate-600 font-semibold rounded-xl text-xs flex items-center justify-center gap-1 transition-all border border-slate-200/50"
+                  >
+                    <RefreshCw size={12} className={syncing ? 'animate-spin' : ''} />
+                    Sync GitHub Profile
+                  </button>
+                </div>
+              ) : (
+                <div className="text-center py-4 space-y-3">
+                  <p className="text-xs text-slate-400">Sync with your linked GitHub account to display credentials and load badges.</p>
+                  <button
+                    type="button"
+                    onClick={() => syncGithub(profile.github_url!)}
+                    disabled={syncing}
+                    className="w-full py-2 bg-accent hover:bg-rose-600 disabled:bg-rose-400 text-white font-semibold rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-sm transition-all"
+                  >
+                    <RefreshCw size={12} className={syncing ? 'animate-spin' : ''} />
+                    Sync profile now
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Achievements list */}
+          <div className="glass-panel p-6 rounded-3xl space-y-4">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+              <Award size={16} />
+              <span>Achievements & Badges</span>
+            </h3>
+
+            <div className="space-y-3">
+              {getAchievements().map(badge => (
+                <div 
+                  key={badge.id}
+                  className={`p-3 rounded-2xl border transition-all flex items-start gap-3 ${
+                    badge.unlocked 
+                      ? 'bg-gradient-to-r from-pink-500/5 via-rose-500/5 to-amber-500/5 border-pink-100 hover:scale-[1.02] cursor-pointer shadow-xs' 
+                      : 'bg-slate-50/40 border-slate-100 opacity-60'
+                  }`}
+                >
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg shadow-sm shrink-0 ${
+                    badge.unlocked 
+                      ? 'bg-white border border-pink-100' 
+                      : 'bg-slate-200/50 border border-slate-200 grayscale'
+                  }`}>
+                    {badge.emoji}
+                  </div>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <h4 className="font-bold text-slate-800 text-xs">{badge.title}</h4>
+                      {badge.unlocked ? (
+                        <span className="text-[8px] font-extrabold text-amber-600 bg-amber-50 px-1.5 py-0.2 rounded uppercase border border-amber-100">
+                          Unlocked
+                        </span>
+                      ) : (
+                        <span className="text-[8px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.2 rounded uppercase">
+                          Locked
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[10px] text-slate-400 leading-relaxed mt-0.5">{badge.description}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
