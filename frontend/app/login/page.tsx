@@ -161,7 +161,7 @@ export default function LoginPage() {
             <span className="font-bold text-white uppercase block mb-1">Demo Credentials Hint</span>
             <div className="flex flex-col gap-1 text-slate-400">
               <div><strong className="text-slate-300">Admin Portal:</strong> <code className="text-amber-300 font-mono">admin@interntrack.com</code> / <code className="text-amber-300 font-mono">Admin@123</code></div>
-              <div><strong className="text-slate-300">Student Profile:</strong> <code className="text-amber-300 font-mono">aarav.patel@student.edu</code> / <code className="text-amber-300 font-mono">Student@123</code></div>
+              <div><strong className="text-slate-300">Student Profile:</strong> <code className="text-amber-300 font-mono">shrimanasa151106@gmail.com</code> / <code className="text-amber-300 font-mono">Student@123</code></div>
             </div>
           </div>
         </div>
