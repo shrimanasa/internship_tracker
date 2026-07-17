@@ -43,6 +43,7 @@ const COLORS = ['#f43f5e', '#a78bfa', '#60a5fa', '#34d399', '#fbbf24', '#f472b6'
 
 export default function StudentDashboardTab({ data, onNavigate }: StudentDashboardTabProps) {
   const [githubProfile, setGithubProfile] = useState<any>(null);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -52,6 +53,68 @@ export default function StudentDashboardTab({ data, onNavigate }: StudentDashboa
       }
     }
   }, []);
+
+  useEffect(() => {
+    if (data && data.status_distribution) {
+      const hasAcceptedOffer = data.status_distribution.some(
+        item => item.status === 'Offer Accepted' && item.count > 0
+      );
+      if (hasAcceptedOffer) {
+        setShowConfetti(true);
+        const timer = setTimeout(() => setShowConfetti(false), 8000);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [data]);
+
+  const renderConfetti = () => {
+    if (!showConfetti) return null;
+    const particles = Array.from({ length: 60 });
+    return (
+      <div className="pointer-events-none fixed inset-0 z-50 overflow-hidden">
+        {particles.map((_, i) => {
+          const left = Math.random() * 100;
+          const delay = Math.random() * 5;
+          const duration = 3 + Math.random() * 3;
+          const size = 6 + Math.random() * 8;
+          const rotation = Math.random() * 360;
+          const colors = ['#f43f5e', '#a78bfa', '#60a5fa', '#34d399', '#fbbf24', '#f472b6'];
+          const color = colors[Math.floor(Math.random() * colors.length)];
+          
+          return (
+            <div
+              key={i}
+              className="absolute animate-[confetti-fall_linear_infinite]"
+              style={{
+                left: `${left}%`,
+                top: `-20px`,
+                width: `${size}px`,
+                height: `${size}px`,
+                backgroundColor: color,
+                transform: `rotate(${rotation}deg)`,
+                animationDelay: `${delay}s`,
+                animationDuration: `${duration}s`,
+                opacity: 0.8,
+                borderRadius: Math.random() > 0.5 ? '50%' : '2px',
+              }}
+            />
+          );
+        })}
+        <style>{`
+          @keyframes confetti-fall {
+            0% {
+              transform: translateY(0) rotate(0deg);
+              opacity: 0.8;
+            }
+            100% {
+              transform: translateY(105vh) rotate(720deg);
+              opacity: 0;
+            }
+          }
+        `}</style>
+      </div>
+    );
+  };
 
   const getAchievements = () => {
     const list = [];
@@ -109,6 +172,7 @@ export default function StudentDashboardTab({ data, onNavigate }: StudentDashboa
 
   return (
     <div className="space-y-6">
+      {renderConfetti()}
       {/* Header and Welcome */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
