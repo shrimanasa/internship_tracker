@@ -84,7 +84,19 @@ Use these pre-seeded accounts to explore all portals:
 | Role | Username / Email | Password | Features |
 | :--- | :--- | :--- | :--- |
 | **Placement Admin** | `admin@interntrack.com` | `Admin@123` | Student directory, company CRUD, audit logs, reports. |
-| **Student Candidate** | `aarav.patel@student.edu` | `Student@123` | Dashboard, Explorer, Kanban pipeline, scheduler. |
+| **Student Candidate** | `shrimanasa151106@gmail.com` | `Student@123` | Dashboard, Explorer, Kanban pipeline, scheduler. |
+
+---
+
+## ✨ Recent Feature Improvements
+
+We have recently upgraded the platform with several modern and professional production features:
+1. **GitHub Profile Integration & Achievements**: Students can now connect their GitHub accounts to display real-time credentials (followers, repos, bio) and unlock achievement badges (e.g., *DBMS Prodigy, Quickdraw, YOLO, Pull Shark*) based on their GitHub username and profile parameters.
+2. **Interactive Confetti Celebrations**: Features a custom-coded vanilla canvas particle confetti animation on the Student Dashboard that fires dynamically when the student receives or accepts their dream internship offer.
+3. **Database Performance Indexing**: Added a database B-Tree index on `internships(eligibility_cgpa)` to speed up range queries when students filter eligible postings.
+4. **Secure Login Rate Limiting**: Added in-memory request tracking and rate limiting validation on auth endpoints (`/login`) to prevent brute-force attacks.
+5. **SMTP Application Notifications**: Expanded the SMTP email service to trigger background notification emails to students immediately after they submit a new internship application.
+6. **Backend Pagination**: Optimized backend endpoints with query pagination (`skip`/`limit` offsets) to efficiently handle large scales of internship postings.
 
 ---
 
