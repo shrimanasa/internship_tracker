@@ -47,6 +47,8 @@ async def get_internships(
     internship_type: Optional[str] = None,
     min_stipend: Optional[float] = None,
     eligible_only: Optional[bool] = False,
+    skip: int = 0,
+    limit: int = 100,
     db: AsyncSession = Depends(get_db),
     student: Optional[StudentProfile] = Depends(get_optional_student)
 ):
@@ -80,7 +82,8 @@ async def get_internships(
     if conditions:
         query = query.where(and_(*conditions))
         
-    result = await db.execute(query.order_by(Internship.application_deadline.asc()))
+    query = query.order_by(Internship.application_deadline.asc()).offset(skip).limit(limit)
+    result = await db.execute(query)
     internships = result.scalars().all()
     
     # Calculate matching scores if student is logged in
