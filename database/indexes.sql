@@ -35,3 +35,6 @@ CREATE INDEX IF NOT EXISTS idx_offers_application ON offers (application_id);
 CREATE INDEX IF NOT EXISTS idx_documents_student ON documents (student_id);
 CREATE INDEX IF NOT EXISTS idx_audit_logs_entity ON audit_logs (entity_type, entity_id);
 CREATE INDEX IF NOT EXISTS idx_audit_logs_user ON audit_logs (user_id);
+
+-- Index for optimizing student eligibility queries by CGPA threshold
+CREATE INDEX IF NOT EXISTS idx_internships_eligibility_cgpa ON internships (eligibility_cgpa);
