@@ -4,6 +4,7 @@ from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 import os
 from app.middleware.logging import RequestLoggingMiddleware
+from app.middleware.correlation import CorrelationIdMiddleware
 
 from app.core.config import settings
 from app.api.v1 import auth, students, companies, internships, applications, interviews, offers, documents, reminders, notifications, analytics, admin
@@ -26,7 +27,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.add_middleware(RequestLoggingMiddleware)
+app.add_middleware(RequestLoggingMiddleware
+from app.middleware.correlation import CorrelationIdMiddleware)
 
 # Include Routers under /api/v1
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["Authentication"])
@@ -96,3 +98,5 @@ async def on_startup():
     logger.info(f"  Max Upload: {settings.MAX_UPLOAD_SIZE / 1024 / 1024:.1f} MB")
     logger.info(f"  SMTP Configured: {'Yes' if settings.SMTP_USER else 'No'}")
     logger.info("=" * 50)
+
+app.add_middleware(CorrelationIdMiddleware)
