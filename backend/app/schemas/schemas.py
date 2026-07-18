@@ -517,3 +517,19 @@ class DashboardStats(BaseModel):
     interviews_scheduled: int
     offers_received: int
     profile_completion: int
+
+
+# ==========================================
+# PAGINATION SCHEMA
+# ==========================================
+
+class PaginatedResponse(BaseModel):
+    """Generic paginated response wrapper for list endpoints."""
+    items: List[Any]
+    total: int
+    page: int = 1
+    page_size: int = 20
+    total_pages: int = 1
+
+    class Config:
+        from_attributes = True
