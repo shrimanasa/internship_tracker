@@ -2,10 +2,20 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "InternTrack - Smart Internship Application & Readiness Tracker",
-  description: "Track every internship application, schedule interviews, store offers, identify technical skill gaps, and monitor your placement readiness in one central place.",
-  keywords: "Internship tracker, student placement, DBMS project, interview scheduler, skill gap analysis, resume verification",
-  authors: [{ name: "InternTrack College Team" }]
+  title: {
+    default: 'InternTrack — Smart Internship Application Manager',
+    template: '%s | InternTrack',
+  },
+  description: 'Track, manage, and optimize your internship applications with InternTrack — a smart college placement management system with skill matching, interview scheduling, and analytics.',
+  keywords: ['internship tracker', 'placement management', 'college internship', 'application tracker', 'skill matching'],
+  authors: [{ name: 'Manasa' }],
+  robots: 'index, follow',
+  openGraph: {
+    type: 'website',
+    title: 'InternTrack — Smart Internship Application Manager',
+    description: 'Track, manage, and optimize your internship applications with InternTrack.',
+    siteName: 'InternTrack',
+  },
 };
 
 export default function RootLayout({
