@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
@@ -9,6 +10,21 @@ from app.schemas.schemas import OfferCreate, OfferUpdate, OfferResponse
 from app.api.deps import get_current_student
 
 router = APIRouter()
+
+
+@router.get("", response_model=List[OfferResponse])
+async def list_all_offers(
+    student: StudentProfile = Depends(get_current_student),
+    db: AsyncSession = Depends(get_db)
+):
+    """Retrieve all offers received by the authenticated student for comparison."""
+    result = await db.execute(
+        select(Offer)
+        .join(Application)
+        .where(Application.student_id == student.student_id)
+        .order_by(Offer.offered_date.desc())
+    )
+    return result.scalars().all()
 
 @router.get("/{offer_id}", response_model=OfferResponse)
 async def get_offer_by_id(
