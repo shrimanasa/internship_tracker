@@ -80,3 +80,19 @@ async def health_check():
         "version": "1.1.0",
         "database": db_status
     }
+
+
+@app.on_event("startup")
+async def on_startup():
+    """Log configuration summary when the application boots."""
+    import logging
+    logger = logging.getLogger("interntrack")
+    logger.info("=" * 50)
+    logger.info("InternTrack API starting up...")
+    logger.info(f"  Version: 1.1.0")
+    logger.info(f"  Database: {settings.POSTGRES_HOST}:{settings.POSTGRES_PORT}/{settings.POSTGRES_DB}")
+    logger.info(f"  CORS Origins: {settings.cors_origins_list}")
+    logger.info(f"  JWT Expiry: {settings.ACCESS_TOKEN_EXPIRE_MINUTES} minutes")
+    logger.info(f"  Max Upload: {settings.MAX_UPLOAD_SIZE / 1024 / 1024:.1f} MB")
+    logger.info(f"  SMTP Configured: {'Yes' if settings.SMTP_USER else 'No'}")
+    logger.info("=" * 50)
