@@ -7,6 +7,7 @@ import {
   ExternalLink, Layers, ArrowRight, Grid, List 
 } from 'lucide-react';
 import { api } from '../lib/api';
+import { showToast } from '@/lib/toast';
 
 interface Company {
   company_id: number;
@@ -108,13 +109,13 @@ export default function StudentApplicationsTab({ applications, companies, onRefr
         next_action_date: nextActionDate || null
       });
 
-      alert('Application tracked successfully!');
+      showToast({ message: 'Application tracked successfully!', type: 'success' });
       // Reset form fields
       setSelectedCompanyId(''); setExtCompany(''); setExtRole(''); setNotes(''); setNextAction(''); setNextActionDate('');
       setShowAddModal(false);
       onRefresh();
     } catch (err: any) {
-      alert(err.message || 'Error tracking application.');
+      showToast({ message: err.message || 'Error tracking application.', type: 'error' });
     }
   };
 
@@ -142,11 +143,11 @@ export default function StudentApplicationsTab({ applications, companies, onRefr
         next_action_date: editActionDate || null
       });
 
-      alert('Application updated successfully!');
+      showToast({ message: 'Application updated successfully!', type: 'success' });
       setShowEditModal(false);
       onRefresh();
     } catch (err: any) {
-      alert(err.message || 'Error updating application.');
+      showToast({ message: err.message || 'Error updating application.', type: 'error' });
     }
   };
 
@@ -156,7 +157,7 @@ export default function StudentApplicationsTab({ applications, companies, onRefr
       await api.post(`/applications/${id}/archive`);
       onRefresh();
     } catch (err: any) {
-      alert(err.message || 'Error archiving application.');
+      showToast({ message: err.message || 'Error archiving application.', type: 'error' });
     }
   };
 

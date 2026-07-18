@@ -7,6 +7,7 @@ import {
   Building, DollarSign, X, Check, ExternalLink 
 } from 'lucide-react';
 import { api } from '../lib/api';
+import { showToast } from '@/lib/toast';
 
 interface RequiredSkill {
   internship_skill_id: number;
@@ -94,7 +95,7 @@ export default function StudentExplorerTab({ internships, savedIds, onRefresh }:
       }
       onRefresh();
     } catch (err: any) {
-      alert(err.message || 'Error updating saved state.');
+      showToast({ message: err.message || 'Error updating saved state.', type: 'error' });
     }
   };
 
@@ -118,11 +119,11 @@ export default function StudentExplorerTab({ internships, savedIds, onRefresh }:
         notes: applyNotes
       });
 
-      alert('Application submitted successfully!');
+      showToast({ message: 'Application submitted successfully!', type: 'success' });
       setShowApplyModal(false);
       onRefresh();
     } catch (err: any) {
-      alert(err.message || 'Could not submit application.');
+      showToast({ message: err.message || 'Could not submit application.', type: 'error' });
     }
   };
 
