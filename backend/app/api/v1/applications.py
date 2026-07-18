@@ -206,3 +206,37 @@ async def archive_application(
     app.is_archived = True
     await db.commit()
     return
+
+@router.get("/export/csv", tags=["Applications"])
+async def export_applications_csv(
+    student: StudentProfile = Depends(get_current_student),
+    db: AsyncSession = Depends(get_db)
+):
+    """Export all student applications as CSV-formatted JSON for client-side download."""
+    result = await db.execute(
+        select(Application)
+        .options(
+            selectinload(Application.company),
+            selectinload(Application.internship)
+        )
+        .where(Application.student_id == student.student_id)
+        .order_by(Application.applied_date.desc())
+    )
+    apps = result.scalars().all()
+
+    rows = []
+    for app in apps:
+        company_name = app.company.company_name if app.company else (app.external_company_name or "N/A")
+        role_title = app.internship.title if app.internship else (app.external_role_title or "N/A")
+        rows.append({
+            "company": company_name,
+            "role": role_title,
+            "status": app.current_status,
+            "priority": app.priority,
+            "applied_date": str(app.applied_date) if app.applied_date else "",
+            "source": app.application_source or "",
+            "expected_stipend": float(app.expected_stipend) if app.expected_stipend else 0,
+            "notes": app.notes or ""
+        })
+
+    return {"count": len(rows), "data": rows}
