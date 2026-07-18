@@ -20,7 +20,16 @@ import StudentAnalyticsTab from '../../components/StudentAnalyticsTab';
 
 export default function StudentPortal() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('interntrack_active_tab') || 'dashboard';
+    }
+    return 'dashboard';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('interntrack_active_tab', activeTab);
+  }, [activeTab]);
   const [userName, setUserName] = useState('Student');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
