@@ -106,3 +106,34 @@ For detailed explanations for your laboratory viva-voce exams, refer to the docu
 * 📐 **[DATABASE_DESIGN.md](docs/DATABASE_DESIGN.md)**: Normalisation checks (3NF) and database indexes.
 * 💾 **[DBMS_CONCEPTS.md](docs/DBMS_CONCEPTS.md)**: ACID transactions, SQL Joins, and Triggers.
 * 🎓 **[VIVA_GUIDE.md](docs/VIVA_GUIDE.md)**: Laboratory viva questions & answer key.
+
+## 🏗️ Architecture
+
+InternTrack follows a 3-tier architecture with clear separation of concerns:
+
+| Layer | Technology | Components |
+|-------|-----------|------------|
+| **Frontend** | Next.js 16, React 19, TailwindCSS v4 | App Router pages, tab-based SPA, glassmorphism UI |
+| **Backend** | FastAPI, SQLAlchemy 2.0 (async) | 12 REST API routers, JWT auth, skill matching engine |
+| **Database** | PostgreSQL 15 | 19 tables, triggers, views, functions, audit logging |
+
+> See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for detailed component diagrams and data flow sequences.
+
+## 🚀 Deployment
+
+### Development (Docker)
+```bash
+cp .env.example .env
+docker-compose up --build
+```
+- Frontend: http://localhost:3001
+- Backend API: http://localhost:8000/api/docs
+- PostgreSQL: localhost:5434
+
+### Production Checklist
+- [ ] Set strong `JWT_SECRET` in environment
+- [ ] Configure `CORS_ORIGINS` to your domain
+- [ ] Set real SMTP credentials for email notifications
+- [ ] Use managed PostgreSQL (e.g., AWS RDS, Supabase)
+- [ ] Enable HTTPS via reverse proxy (Nginx/Caddy)
+- [ ] Set `--workers 4` in uvicorn for multi-core utilization
