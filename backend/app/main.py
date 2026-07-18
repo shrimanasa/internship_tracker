@@ -50,12 +50,13 @@ app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR_PATH), name="uploads")
 # Centralized Exception Handler for nice API responses
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
+    import logging
+    logging.getLogger("interntrack").error(f"Unhandled exception on {request.url.path}: {exc}")
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         content={
             "success": False,
-            "message": "An unexpected error occurred on the server.",
-            "error_details": str(exc)
+            "message": "An unexpected error occurred on the server. Please try again later."
         }
     )
 
