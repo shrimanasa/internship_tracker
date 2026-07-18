@@ -38,3 +38,9 @@ CREATE INDEX IF NOT EXISTS idx_audit_logs_user ON audit_logs (user_id);
 
 -- Index for optimizing student eligibility queries by CGPA threshold
 CREATE INDEX IF NOT EXISTS idx_internships_eligibility_cgpa ON internships (eligibility_cgpa);
+
+-- Compound index for student application pipeline dashboard queries
+CREATE INDEX IF NOT EXISTS idx_applications_student_status ON applications (student_id, current_status);
+
+-- Index for sorting applications by priority within a student's pipeline
+CREATE INDEX IF NOT EXISTS idx_applications_student_priority ON applications (student_id, priority);
