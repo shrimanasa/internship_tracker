@@ -5,3 +5,20 @@ __pycache__/
 *.pyc
 .env
 uploads/
+
+# IDE and OS files
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
+*.log
+
+# Python artifacts
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# Next.js build output
+out/
