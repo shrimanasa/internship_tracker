@@ -1,21 +1,29 @@
-FROM node:20-alpine
+# ---- Stage 1: Install Dependencies ----
+FROM node:18-alpine AS deps
 
 WORKDIR /app
 
-# Copy dependency manifests
-COPY package*.json ./
+COPY package.json package-lock.json* ./
+RUN npm ci --prefer-offline
 
-# Install dependencies
-RUN npm install
+# ---- Stage 2: Development Runtime ----
+FROM node:18-alpine
 
-# Copy application files
+WORKDIR /app
+
+# Disable Next.js telemetry
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=development
+
+# Copy dependencies from deps stage
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Expose Next.js development server port
+# Create non-root user
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+RUN chown -R appuser:appgroup /app
+USER appuser
+
 EXPOSE 3000
 
-ENV PORT=3000
-ENV HOSTNAME="0.0.0.0"
-
-# Start Next.js development server
 CMD ["npm", "run", "dev"]
