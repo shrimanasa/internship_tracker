@@ -97,7 +97,7 @@ async def schedule_interview(
           </tr>
           <tr>
             <td style="padding: 8px 0; font-weight: bold; color: #db2777;">Round:</td>
-            <td style="padding: 8px 0;">{new_intv.round_name} ({new_intv.round_type})</td>
+            <td style="padding: 8px 0;">Round {new_intv.interview_round} ({new_intv.interview_type})</td>
           </tr>
           <tr>
             <td style="padding: 8px 0; font-weight: bold; color: #db2777;">Time:</td>
