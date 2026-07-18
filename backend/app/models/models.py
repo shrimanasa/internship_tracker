@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy import (
     Column, Integer, String, Boolean, DateTime, Date, Numeric, 
     ForeignKey, Text, UniqueConstraint, CheckConstraint
@@ -17,8 +17,8 @@ class User(Base):
     password_hash = Column(String(255), nullable=False)
     role = Column(String(20), nullable=False, default="student")
     is_active = Column(Boolean, nullable=False, default=True)
-    created_at = Column(DateTime(timezone=True), default=datetime.utcnow)
-    updated_at = Column(DateTime(timezone=True), default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
     last_login_at = Column(DateTime(timezone=True))
 
     # Relationships
@@ -59,8 +59,8 @@ class StudentProfile(Base):
     github_url = Column(String(255))
     portfolio_url = Column(String(255))
     profile_completion_percentage = Column(Integer, default=0)
-    created_at = Column(DateTime(timezone=True), default=datetime.utcnow)
-    updated_at = Column(DateTime(timezone=True), default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
     # Relationships
     user = relationship("User", back_populates="student_profile")
@@ -114,7 +114,7 @@ class StudentSkill(Base):
     proficiency_level = Column(String(20), nullable=False) # 'Beginner', 'Intermediate', 'Advanced'
     years_of_experience = Column(Numeric(3, 1), default=0.0)
     verified = Column(Boolean, nullable=False, default=False)
-    created_at = Column(DateTime(timezone=True), default=datetime.utcnow)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     # Relationships
     student = relationship("StudentProfile", back_populates="skills")
@@ -134,8 +134,8 @@ class Company(Base):
     description = Column(Text)
     logo_url = Column(String(255))
     is_active = Column(Boolean, nullable=False, default=True)
-    created_at = Column(DateTime(timezone=True), default=datetime.utcnow)
-    updated_at = Column(DateTime(timezone=True), default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
     # Relationships
     internships = relationship("Internship", back_populates="company", cascade="all, delete")
@@ -163,8 +163,8 @@ class Internship(Base):
     source = Column(String(50), default="Internal") # 'Internal' or 'External'
     status = Column(String(20), nullable=False, default="Draft", index=True) # 'Draft', 'Open', 'Closed', 'Archived'
     created_by = Column(Integer, ForeignKey("users.user_id", ondelete="RESTRICT"), nullable=False)
-    created_at = Column(DateTime(timezone=True), default=datetime.utcnow)
-    updated_at = Column(DateTime(timezone=True), default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
     # Relationships
     company = relationship("Company", back_populates="internships")
@@ -197,7 +197,7 @@ class SavedInternship(Base):
     saved_internship_id = Column(Integer, primary_key=True, index=True)
     student_id = Column(Integer, ForeignKey("student_profiles.student_id", ondelete="CASCADE"), nullable=False)
     internship_id = Column(Integer, ForeignKey("internships.internship_id", ondelete="CASCADE"), nullable=False)
-    saved_at = Column(DateTime(timezone=True), default=datetime.utcnow)
+    saved_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     # Relationships
     student = relationship("StudentProfile", back_populates="saved_internships")
@@ -224,8 +224,8 @@ class Application(Base):
     next_action = Column(String(255))
     next_action_date = Column(Date)
     is_archived = Column(Boolean, nullable=False, default=False)
-    created_at = Column(DateTime(timezone=True), default=datetime.utcnow)
-    updated_at = Column(DateTime(timezone=True), default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
     # Relationships
     student = relationship("StudentProfile", back_populates="applications")
@@ -248,7 +248,7 @@ class ApplicationStatusHistory(Base):
     new_status = Column(String(30), nullable=False)
     changed_by = Column(Integer, ForeignKey("users.user_id", ondelete="RESTRICT"), nullable=False)
     change_note = Column(Text)
-    changed_at = Column(DateTime(timezone=True), default=datetime.utcnow)
+    changed_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     # Relationships
     application = relationship("Application", back_populates="status_history")
@@ -271,8 +271,8 @@ class Interview(Base):
     preparation_notes = Column(Text)
     feedback_notes = Column(Text)
     result = Column(String(20)) # 'Passed', 'Failed', 'Pending'
-    created_at = Column(DateTime(timezone=True), default=datetime.utcnow)
-    updated_at = Column(DateTime(timezone=True), default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
     # Relationships
     application = relationship("Application", back_populates="interviews")
@@ -294,8 +294,8 @@ class Offer(Base):
     offer_status = Column(String(20), nullable=False, default="Pending") # 'Pending', 'Accepted', 'Declined', 'Expired'
     offer_letter_path = Column(String(255))
     notes = Column(Text)
-    created_at = Column(DateTime(timezone=True), default=datetime.utcnow)
-    updated_at = Column(DateTime(timezone=True), default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
     # Relationships
     application = relationship("Application", back_populates="offer")
@@ -314,7 +314,7 @@ class Document(Base):
     mime_type = Column(String(100), nullable=False)
     file_size = Column(Integer, nullable=False)
     verification_status = Column(String(20), nullable=False, default="Pending") # 'Pending', 'Verified', 'Rejected'
-    uploaded_at = Column(DateTime(timezone=True), default=datetime.utcnow)
+    uploaded_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     verified_by = Column(Integer, ForeignKey("users.user_id", ondelete="SET NULL"), nullable=True)
     verified_at = Column(DateTime(timezone=True), nullable=True)
 
@@ -334,7 +334,7 @@ class Reminder(Base):
     reminder_datetime = Column(DateTime(timezone=True), nullable=False, index=True)
     reminder_type = Column(String(30), nullable=False, default="Deadline")
     is_completed = Column(Boolean, nullable=False, default=False)
-    created_at = Column(DateTime(timezone=True), default=datetime.utcnow)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     # Relationships
     student = relationship("StudentProfile", back_populates="reminders")
@@ -352,7 +352,7 @@ class Notification(Base):
     is_read = Column(Boolean, nullable=False, default=False)
     related_entity_type = Column(String(50))
     related_entity_id = Column(Integer)
-    created_at = Column(DateTime(timezone=True), default=datetime.utcnow)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     # Relationships
     user = relationship("User", back_populates="notifications")
@@ -366,8 +366,8 @@ class Note(Base):
     application_id = Column(Integer, ForeignKey("applications.application_id", ondelete="CASCADE"), nullable=True)
     title = Column(String(150), nullable=False)
     content = Column(Text, nullable=False)
-    created_at = Column(DateTime(timezone=True), default=datetime.utcnow)
-    updated_at = Column(DateTime(timezone=True), default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
     # Relationships
     student = relationship("StudentProfile", back_populates="notes")
@@ -385,7 +385,7 @@ class AuditLog(Base):
     old_values = Column(JSONB, nullable=True)
     new_values = Column(JSONB, nullable=True)
     ip_address = Column(String(45))
-    created_at = Column(DateTime(timezone=True), default=datetime.utcnow)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     # Relationships
     user = relationship("User", back_populates="audit_logs")

@@ -133,7 +133,8 @@ async def login(
         )
 
     # Update last login time
-    user.last_login_at = datetime.utcnow()
+    from datetime import timezone
+    user.last_login_at = datetime.now(timezone.utc)
     await db.commit()
 
     # Generate JWT token
