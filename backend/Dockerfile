@@ -1,27 +1,48 @@
-FROM python:3.11-slim
+# ---- Stage 1: Builder ----
+FROM python:3.11-slim AS builder
 
 WORKDIR /app
 
-# Install system dependencies (curl for health check, libpq for postgres)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl \
     build-essential \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy and install python dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 
-# Copy backend codebase
+# ---- Stage 2: Runtime ----
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install only runtime dependencies (no build tools)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    libpq5 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy installed Python packages from builder
+COPY --from=builder /install /usr/local
+
+# Create non-root user for security
+RUN groupadd -r appuser && useradd -r -g appuser -s /sbin/nologin appuser
+
+# Copy application code
 COPY . .
 
-# Expose FastAPI default port
+# Set ownership
+RUN chown -R appuser:appuser /app
+
+# Expose port
 EXPOSE 8000
 
-# Set environment variables
+# Runtime environment
 ENV PYTHONUNBUFFERED=1
 ENV PORT=8000
 
-# Start command
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+# Switch to non-root user
+USER appuser
+
+# Production-ready command (no --reload)
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2"]
