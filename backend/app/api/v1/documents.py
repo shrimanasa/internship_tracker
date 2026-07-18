@@ -1,6 +1,8 @@
 import os
 import uuid
 from typing import List, Optional
+from datetime import datetime
+from sqlalchemy import text
 from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form
 from fastapi.responses import FileResponse
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -188,7 +190,7 @@ async def verify_document(
         )
 
     # Set DB session variable for audit log context
-    await db.execute(f"SET LOCAL app.current_user_id = '{admin.user_id}';")
+    await db.execute(text(f"SET LOCAL app.current_user_id = '{admin.user_id}';"))
 
     doc.verification_status = verification_status
     doc.verified_by = admin.user_id
