@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 import os
+from app.middleware.logging import RequestLoggingMiddleware
 
 from app.core.config import settings
 from app.api.v1 import auth, students, companies, internships, applications, interviews, offers, documents, reminders, notifications, analytics, admin
@@ -24,6 +25,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.add_middleware(RequestLoggingMiddleware)
 
 # Include Routers under /api/v1
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["Authentication"])
