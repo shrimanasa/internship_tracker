@@ -8,7 +8,7 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
 from app.core.config import settings
-from app.core.security import verify_password, get_password_hash, create_access_token
+from app.core.security import verify_password, get_password_hash, create_access_token, validate_password_strength
 from app.db.session import get_db
 from app.models.models import User, StudentProfile, Department
 from app.schemas.schemas import UserCreate, Token, UserResponse, UserLogin
@@ -36,6 +36,14 @@ async def register_student(user_in: UserCreate, db: AsyncSession = Depends(get_d
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="A user with this email address already exists."
+        )
+
+    # Validate password strength
+    is_valid, pwd_error = validate_password_strength(user_in.password)
+    if not is_valid:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=pwd_error
         )
 
     # If student role, check registration number and department ID
