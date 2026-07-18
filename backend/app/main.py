@@ -20,7 +20,7 @@ app = FastAPI(
 # Allowing frontend Dev server (Next.js) to connect
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # In development, we allow all for simplicity. Can restrict to ["http://localhost:3000"]
+    allow_origins=settings.cors_origins_list, # In development, we allow all for simplicity. Can restrict to ["http://localhost:3000"]
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

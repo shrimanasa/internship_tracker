@@ -40,6 +40,13 @@ class Settings(BaseSettings):
     SMTP_USER: str = ""
     SMTP_PASSWORD: str = ""
 
+    # CORS Configuration
+    CORS_ORIGINS: str = "http://localhost:3000,http://localhost:3001"
+
+    @property
+    def cors_origins_list(self) -> List[str]:
+        return [origin.strip() for origin in self.CORS_ORIGINS.split(",")]
+
     @property
     def allowed_extensions_list(self) -> List[str]:
         return [ext.strip().lower() for ext in self.ALLOWED_EXTENSIONS.split(",")]
