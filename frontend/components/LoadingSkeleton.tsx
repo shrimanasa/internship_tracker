@@ -13,6 +13,8 @@ export function Skeleton({ width = '100%', height = '20px', borderRadius = '12px
   return (
     <div
       className={className}
+      aria-busy="true"
+      aria-label="Loading content"
       style={{
         width,
         height,
@@ -24,6 +26,7 @@ export function Skeleton({ width = '100%', height = '20px', borderRadius = '12px
     />
   );
 }
+
 
 export function DashboardCardSkeleton() {
   return (
