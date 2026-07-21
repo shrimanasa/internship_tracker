@@ -80,3 +80,13 @@ export function isOverdue(dateString: string | null | undefined): boolean {
     return false;
   }
 }
+
+/**
+ * Safely check if a string is a valid ISO date representation.
+ */
+export function isValidDateString(dateString: string | null | undefined): boolean {
+  if (!dateString) return false;
+  const d = new Date(dateString);
+  return !isNaN(d.getTime());
+}
+
