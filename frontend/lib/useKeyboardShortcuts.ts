@@ -38,6 +38,7 @@ export function useKeyboardShortcuts(shortcuts: ShortcutMap): void {
       }
     };
 
+    // Attach keydown listener on mount and cleanup on unmount/shortcut update
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
   }, [shortcuts]);
