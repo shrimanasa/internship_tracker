@@ -58,6 +58,11 @@ graph TB
 | `lib/dates.ts` | Date formatting utilities |
 | `lib/types.ts` | Shared TypeScript interfaces |
 
+### Database Resilience & Connection Pooling
+- PostgreSQL connection pooling managed asynchronously via SQLAlchemy 2.0 and `asyncpg`.
+- Configured connection recycling and max overflow safeguards for high concurrency.
+
+
 ### Backend (Business Logic Layer)
 | Component | Responsibility |
 |-----------|---------------|
