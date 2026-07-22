@@ -56,7 +56,8 @@ Students do not apply directly from this portal. When applying to an internship:
 ## 🛠️ Technology Stack
 * **Frontend**: Next.js 15, React 19, Tailwind CSS, Lucide Icons, Recharts (D3-based charts).
 * **Backend**: FastAPI, SQLAlchemy 2.0 (Asyncpg client), Pydantic v2, Bcrypt, Pytest, Python-jose (JWT).
-* **Database**: PostgreSQL 15, PL/pgSQL procedural functions/triggers.
+* **Database**: PostgreSQL 15, PL/pgSQL procedural functions/triggers (`DATABASE_URL` configured in `.env`).
+
 
 ---
 
