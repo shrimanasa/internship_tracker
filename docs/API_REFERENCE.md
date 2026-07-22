@@ -28,10 +28,11 @@ All endpoints are prefixed with `/api/v1`. Authentication is via Bearer JWT toke
 ## 💼 Internships
 | Method | Endpoint | Description | Auth |
 |--------|----------|-------------|------|
-| GET | `/internships` | Browse open internships (paginated) | Optional |
+| GET | `/internships` | Browse open internships (`?page=1&limit=20`) | Optional |
 | GET | `/internships/{id}` | Get internship details with skill match | Optional |
 | POST | `/internships` | Publish a new internship | Admin |
 | PUT | `/internships/{id}` | Edit an internship | Admin |
+
 
 ## 📋 Applications
 | Method | Endpoint | Description | Auth |
