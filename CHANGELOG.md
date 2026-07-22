@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.0] - 2026-07-22
+### Improved
+- Frontend date utilities and type safety
+- Backend health and file signature validation tests
+- API endpoint documentation and system architecture notes
+
 ## [1.1.0] - 2026-07-18
 ### Added
 - Request logging middleware
