@@ -6,6 +6,7 @@ const API_BASE_URL = typeof window !== 'undefined'
 
 interface RequestOptions extends RequestInit {
   params?: Record<string, string | number | boolean | undefined>;
+  timeoutMs?: number;
 }
 
 // Get JWT token from localStorage
