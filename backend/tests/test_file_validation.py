@@ -24,3 +24,8 @@ class TestFileValidation:
     def test_unknown_extension_passes(self):
         is_valid, _ = validate_file_signature(b"any", "xyz")
         assert is_valid is True
+
+    def test_empty_bytes(self):
+        is_valid, err = validate_file_signature(b"", "pdf")
+        assert is_valid is False
+
