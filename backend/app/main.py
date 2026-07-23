@@ -64,23 +64,30 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 @app.get("/health", tags=["System"])
 async def health_check():
-    """Returns service health status including database connectivity."""
+    """Returns service health status including database connectivity and latency."""
     db_status = "unknown"
+    db_latency_ms = None
     try:
+        import time
         from app.db.session import engine
         from sqlalchemy import text
+        start_time = time.perf_counter()
         async with engine.connect() as conn:
             await conn.execute(text("SELECT 1"))
-            db_status = "connected"
+        db_latency_ms = round((time.perf_counter() - start_time) * 1000, 2)
+        db_status = "connected"
     except Exception:
         db_status = "disconnected"
 
     return {
         "success": True,
-        "status": "healthy",
+        "status": "healthy" if db_status == "connected" else "degraded",
         "service": "InternTrack Backend",
-        "version": "1.1.0",
-        "database": db_status
+        "version": "1.2.0",
+        "database": {
+            "status": db_status,
+            "latency_ms": db_latency_ms
+        }
     }
 
 
