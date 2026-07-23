@@ -27,8 +27,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.add_middleware(RequestLoggingMiddleware
-from app.middleware.correlation import CorrelationIdMiddleware)
+app.add_middleware(RequestLoggingMiddleware)
+app.add_middleware(CorrelationIdMiddleware)
 
 # Include Routers under /api/v1
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["Authentication"])
@@ -98,5 +98,3 @@ async def on_startup():
     logger.info(f"  Max Upload: {settings.MAX_UPLOAD_SIZE / 1024 / 1024:.1f} MB")
     logger.info(f"  SMTP Configured: {'Yes' if settings.SMTP_USER else 'No'}")
     logger.info("=" * 50)
-
-app.add_middleware(CorrelationIdMiddleware)
