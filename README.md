@@ -1,4 +1,4 @@
-# 🚀 InternTrack: Smart Internship & Progress Manager
+# InternTrack: Smart Internship & Progress Manager
 
 <p align="center">
   <img src="https://img.shields.io/badge/Frontend-Next.js%2015%20%7C%20React%2019-pink?style=for-the-badge&logo=nextdotjs" alt="Next.js" />
