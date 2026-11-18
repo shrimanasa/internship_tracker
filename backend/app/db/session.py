@@ -1,6 +1,6 @@
 from typing import AsyncGenerator
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
+from sqlalchemy.orm import declarative_base
 from app.core.config import settings
 
 # Create async engine for PostgreSQL connections
@@ -12,8 +12,8 @@ engine = create_async_engine(
     max_overflow=10
 )
 
-# Create async session maker
-AsyncSessionLocal = sessionmaker(
+# Create async session maker using SQLAlchemy 2.0+ async_sessionmaker
+AsyncSessionLocal = async_sessionmaker(
     bind=engine,
     class_=AsyncSession,
     expire_on_commit=False
