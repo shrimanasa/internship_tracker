@@ -13,7 +13,7 @@ from app.api.v1 import auth, students, companies, internships, applications, int
 app = FastAPI(
     title="InternTrack API",
     description="Smart Internship Application and Progress Management System API backend",
-    version="1.0.0",
+    version="1.2.0",
     docs_url="/api/docs",
     openapi_url="/api/openapi.json"
 )
@@ -100,7 +100,7 @@ async def on_startup():
     logger = logging.getLogger("interntrack")
     logger.info("=" * 50)
     logger.info("InternTrack API starting up...")
-    logger.info(f"  Version: 1.1.0")
+    logger.info(f"  Version: 1.2.0")
     logger.info(f"  Database: {settings.POSTGRES_HOST}:{settings.POSTGRES_PORT}/{settings.POSTGRES_DB}")
     logger.info(f"  CORS Origins: {settings.cors_origins_list}")
     logger.info(f"  JWT Expiry: {settings.ACCESS_TOKEN_EXPIRE_MINUTES} minutes")
