@@ -1,6 +1,6 @@
 from datetime import datetime, date
 from typing import Optional, List, Any
-from pydantic import BaseModel, Field, EmailStr, HttpUrl
+from pydantic import BaseModel, ConfigDict, Field, EmailStr, HttpUrl
 from decimal import Decimal
 
 # ==========================================
@@ -30,8 +30,7 @@ class UserResponse(UserBase):
     created_at: datetime
     last_login_at: Optional[datetime] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class Token(BaseModel):
     access_token: str
@@ -56,8 +55,7 @@ class DepartmentBase(BaseModel):
 class DepartmentResponse(DepartmentBase):
     department_id: int
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # ==========================================
@@ -80,8 +78,7 @@ class EducationResponse(EducationBase):
     education_id: int
     student_id: int
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # ==========================================
@@ -96,8 +93,7 @@ class SkillBase(BaseModel):
 class SkillResponse(SkillBase):
     skill_id: int
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class StudentSkillBase(BaseModel):
     skill_id: int
@@ -114,8 +110,7 @@ class StudentSkillResponse(StudentSkillBase):
     created_at: datetime
     skill: SkillResponse
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # ==========================================
@@ -141,8 +136,7 @@ class CompanyResponse(CompanyBase):
     created_at: datetime
     updated_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # ==========================================
@@ -163,8 +157,7 @@ class InternshipRequiredSkillResponse(InternshipRequiredSkillBase):
     internship_id: int
     skill: SkillResponse
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class InternshipBase(BaseModel):
     company_id: int
@@ -193,8 +186,7 @@ class InternshipResponse(InternshipBase):
     created_at: datetime
     updated_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class SkillMatchResponse(BaseModel):
     match_percentage: float
@@ -207,8 +199,7 @@ class InternshipDetailsResponse(InternshipResponse):
     required_skills: List[InternshipRequiredSkillResponse] = []
     skill_match: Optional[SkillMatchResponse] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # ==========================================
@@ -246,15 +237,13 @@ class StudentProfileResponse(StudentProfileBase):
     user: UserResponse
     department: DepartmentResponse
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class StudentProfileDetailsResponse(StudentProfileResponse):
     education: List[EducationResponse] = []
     skills: List[StudentSkillResponse] = []
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # ==========================================
@@ -267,8 +256,7 @@ class SavedInternshipResponse(BaseModel):
     internship: InternshipResponse
     saved_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # ==========================================
@@ -300,8 +288,7 @@ class InterviewResponse(InterviewBase):
     created_at: datetime
     updated_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # ==========================================
@@ -333,8 +320,7 @@ class OfferResponse(OfferBase):
     created_at: datetime
     updated_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # ==========================================
@@ -356,8 +342,7 @@ class DocumentResponse(BaseModel):
     verified_by: Optional[int] = None
     verified_at: Optional[datetime] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # ==========================================
@@ -380,8 +365,7 @@ class ReminderResponse(ReminderBase):
     is_completed: bool
     created_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # ==========================================
@@ -402,8 +386,7 @@ class NoteResponse(NoteBase):
     created_at: datetime
     updated_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # ==========================================
@@ -447,8 +430,7 @@ class ApplicationResponse(ApplicationBase):
     company: CompanyResponse
     internship: Optional[InternshipResponse] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class ApplicationStatusHistoryResponse(BaseModel):
     history_id: int
@@ -459,8 +441,7 @@ class ApplicationStatusHistoryResponse(BaseModel):
     change_note: Optional[str] = None
     changed_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class ApplicationDetailsResponse(ApplicationResponse):
     status_history: List[ApplicationStatusHistoryResponse] = []
@@ -470,8 +451,7 @@ class ApplicationDetailsResponse(ApplicationResponse):
     reminders: List[ReminderResponse] = []
     notes_list: List[NoteResponse] = []
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # ==========================================
@@ -489,8 +469,7 @@ class NotificationResponse(BaseModel):
     related_entity_id: Optional[int] = None
     created_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # ==========================================
@@ -508,8 +487,7 @@ class AuditLogResponse(BaseModel):
     ip_address: Optional[str] = None
     created_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class DashboardStats(BaseModel):
     total_applications: int
@@ -531,5 +509,4 @@ class PaginatedResponse(BaseModel):
     page_size: int = 20
     total_pages: int = 1
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
