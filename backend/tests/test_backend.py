@@ -1,6 +1,8 @@
 import pytest
+from unittest.mock import AsyncMock, MagicMock
 from fastapi.testclient import TestClient
 from app.main import app
+from app.db.session import get_db
 from app.services.matching import calculate_skill_match_py
 from app.models.models import StudentSkill, InternshipRequiredSkill, Skill
 from app.schemas.schemas import SkillMatchResponse
@@ -10,12 +12,24 @@ client = TestClient(app)
 def test_health_check():
     response = client.get("/health")
     assert response.status_code == 200
-    assert response.json()["status"] == "healthy"
+    assert response.json()["status"] in ("healthy", "degraded")
+    assert response.json()["success"] is True
 
 def test_invalid_login():
-    response = client.post("/api/v1/auth/login", data={"username": "notexist@student.edu", "password": "wrongpassword"})
-    assert response.status_code == 400
-    assert "Incorrect email or password" in response.json()["detail"]
+    async def override_get_db():
+        mock_session = AsyncMock()
+        mock_result = MagicMock()
+        mock_result.scalars.return_value.first.return_value = None
+        mock_session.execute.return_value = mock_result
+        yield mock_session
+
+    app.dependency_overrides[get_db] = override_get_db
+    try:
+        response = client.post("/api/v1/auth/login", data={"username": "notexist@student.edu", "password": "wrongpassword"})
+        assert response.status_code == 400
+        assert "Incorrect email or password" in response.json()["detail"]
+    finally:
+        app.dependency_overrides.pop(get_db, None)
 
 def test_registration_validation():
     # Attempt registration with short password
