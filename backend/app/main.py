@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -10,12 +11,31 @@ from app.middleware.security import SecurityHeadersMiddleware
 from app.core.config import settings
 from app.api.v1 import auth, students, companies, internships, applications, interviews, offers, documents, reminders, notifications, analytics, admin
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Log configuration summary when the application boots."""
+    import logging
+    logger = logging.getLogger("interntrack")
+    logger.info("=" * 50)
+    logger.info("InternTrack API starting up...")
+    logger.info(f"  Version: 1.2.0")
+    logger.info(f"  Database: {settings.POSTGRES_HOST}:{settings.POSTGRES_PORT}/{settings.POSTGRES_DB}")
+    logger.info(f"  CORS Origins: {settings.cors_origins_list}")
+    logger.info(f"  JWT Expiry: {settings.ACCESS_TOKEN_EXPIRE_MINUTES} minutes")
+    logger.info(f"  Max Upload: {settings.MAX_UPLOAD_SIZE / 1024 / 1024:.1f} MB")
+    logger.info(f"  SMTP Configured: {'Yes' if settings.SMTP_USER else 'No'}")
+    logger.info("=" * 50)
+    yield
+
+
 app = FastAPI(
     title="InternTrack API",
     description="Smart Internship Application and Progress Management System API backend",
     version="1.2.0",
     docs_url="/api/docs",
-    openapi_url="/api/openapi.json"
+    openapi_url="/api/openapi.json",
+    lifespan=lifespan,
 )
 
 # Configure CORS (Cross-Origin Resource Sharing)
@@ -91,19 +111,3 @@ async def health_check():
             "latency_ms": db_latency_ms
         }
     }
-
-
-@app.on_event("startup")
-async def on_startup():
-    """Log configuration summary when the application boots."""
-    import logging
-    logger = logging.getLogger("interntrack")
-    logger.info("=" * 50)
-    logger.info("InternTrack API starting up...")
-    logger.info(f"  Version: 1.2.0")
-    logger.info(f"  Database: {settings.POSTGRES_HOST}:{settings.POSTGRES_PORT}/{settings.POSTGRES_DB}")
-    logger.info(f"  CORS Origins: {settings.cors_origins_list}")
-    logger.info(f"  JWT Expiry: {settings.ACCESS_TOKEN_EXPIRE_MINUTES} minutes")
-    logger.info(f"  Max Upload: {settings.MAX_UPLOAD_SIZE / 1024 / 1024:.1f} MB")
-    logger.info(f"  SMTP Configured: {'Yes' if settings.SMTP_USER else 'No'}")
-    logger.info("=" * 50)
